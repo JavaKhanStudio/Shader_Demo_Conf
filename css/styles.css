@@ -1,0 +1,99 @@
+:root {
+    --primary-red: #BA0101;
+    --shadow-red: #ba01016f;
+    --primary-blue: #0752CF;
+    --background-color: aliceblue;
+    --text-color: #333333;
+    --accent-color: #0752CF;
+    --border-color: #E0E0E0;
+    --font-family: 'Arial', sans-serif;
+    --font-size-base: 16px;
+    --line-height: 1.6;
+
+    /* Spacing settings */
+    --padding: 16px;
+    --margin: 16px;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--primary-red);
+}
+
+a {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+button {
+    background-color: var(--primary-red);
+    color: #FFFFFF;
+    border: none;
+    padding: var(--padding);
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--primary-blue);
+}
+
+header {
+    background-color: var(--background-color);
+}
+
+header h1 {
+    text-align: center;
+    padding: 20px;
+}
+
+.shader-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.shader-item {
+    background-color: #ffffff;
+    box-shadow: 4px -2px 7px 6px rgba(1, 1, 1, 0.6);
+    padding: 5px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.4s ease;
+    border: rgba(1, 1, 1, 0.0) 3px dashed;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.shader-item:hover {
+    box-shadow: 4px 2px 6px 6px var(--shadow-red);
+    border: var(--primary-blue) 3px dashed;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+canvas {
+    width: 99%;
+    border-radius: 10px;
+    height: 200px;
+    display: block;
+}
