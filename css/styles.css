@@ -2,6 +2,7 @@
     --primary-red: #BA0101;
     --shadow-red: #ba01016f;
     --primary-blue: #0752CF;
+    --h1-blue: #5f86c8;
     --background-color: aliceblue;
     --text-color: #333333;
     --accent-color: #0752CF;
@@ -21,16 +22,9 @@ body {
     line-height: var(--line-height);
     background-color: var(--background-color);
     color: var(--text-color);
+    margin: 0px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: var(--primary-red);
-}
 
 a {
     color: var(--primary-blue);
@@ -54,26 +48,69 @@ button:hover {
 }
 
 header {
-    background-color: var(--background-color);
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 header h1 {
     text-align: center;
-    padding: 20px;
+    position: relative;
+    font-size: 4.5em;
+    font-family: Kanit;
+    z-index: 1;
+    color: var(--h1-blue);
+    -webkit-text-stroke: 1px var(--primary-red);
+}
+
+main,
+footer {
+    position: relative;
+}
+
+#header-canvas,
+#main-canvas,
+#footer-canvas {
+    border-radius: 0px;
+    position: absolute;
+    z-index: -1 !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .shader-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+    padding: 50px;
+}
+
+
+header h1 {
+    position: relative;
+    z-index: 1;
+}
+
+#header-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .shader-item {
     background-color: #ffffff;
     box-shadow: 4px -2px 7px 6px rgba(1, 1, 1, 0.6);
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -82,6 +119,13 @@ header h1 {
     border: rgba(1, 1, 1, 0.0) 3px dashed;
     text-align: center;
     font-size: 1.2em;
+    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+.shader-item h2 {
+    height: 20%;
 }
 
 .shader-item:hover {

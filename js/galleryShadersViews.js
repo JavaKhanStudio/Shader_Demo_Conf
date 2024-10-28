@@ -1,20 +1,46 @@
-// js/main.js
-import { shaders } from './shaders.js';
+import { shaders } from './shadersList.js';
+import { injectShaderToElement } from './shaderInjector.js';
 
 const gridContainer = document.createElement('div');
 gridContainer.classList.add('shader-grid');
-document.body.appendChild(gridContainer);
+document.querySelector('main').appendChild(gridContainer);
 
 function createShaderView(shader) {
-    const canvasWrapper = document.createElement('a');
+    const canvasWrapper = document.createElement('div');
     canvasWrapper.classList.add('shader-item');
     const canvas = document.createElement('canvas');
     const title = document.createElement('h2');
     title.textContent = shader.name;
 
+    const buttonContainer = document.createElement('div');
+    const headerButton = document.createElement('button');
+    headerButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        injectShaderToElement(shader, 'header');
+    });
+
+    const mainButton = document.createElement('button');
+    mainButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        injectShaderToElement(shader, 'main');
+    });
+
+    const footerButton = document.createElement('button');
+    footerButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        injectShaderToElement(shader, 'footer');
+    });
+
+    buttonContainer.appendChild(headerButton);
+    buttonContainer.appendChild(mainButton);
+    buttonContainer.appendChild(footerButton);
+
     canvasWrapper.appendChild(canvas);
     gridContainer.appendChild(canvasWrapper);
     canvasWrapper.appendChild(title);
+    canvasWrapper.appendChild(buttonContainer);
+
+
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
@@ -27,7 +53,6 @@ function createShaderView(shader) {
     const plane = new THREE.Mesh(geometry, shader.material);
     scene.add(plane);
 
-    // Animation loop with time-based updates
     function animate(time) {
         if (shader.material.uniforms.time) {
             shader.material.uniforms.time.value = time * 0.001;
@@ -39,7 +64,6 @@ function createShaderView(shader) {
 
     animate();
 
-    // Handle window resize
     window.addEventListener('resize', () => {
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         camera.aspect = canvas.clientWidth / canvas.clientHeight;
@@ -47,5 +71,4 @@ function createShaderView(shader) {
     });
 }
 
-// Loop through shaders and create a view for each one
 shaders.forEach(shader => createShaderView(shader));

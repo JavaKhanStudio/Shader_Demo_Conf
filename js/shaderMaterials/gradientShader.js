@@ -1,4 +1,4 @@
-// js/shaderMaterials/gradientShader.js
+// Made by Chat GPT
 
 export const GradientShaderMaterial = new THREE.ShaderMaterial({
   vertexShader: `
