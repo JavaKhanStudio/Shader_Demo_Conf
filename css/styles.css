@@ -16,6 +16,56 @@
     --margin: 16px;
 }
 
+/* Dark theme styling for nav */
+nav {
+    background-color: #1c1c1c;
+    /* Dark background */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    /* Adds a sharp shadow */
+}
+
+nav a {
+    flex: 1;
+    /* Makes each <a> take up equal space */
+    color: #f0f0f0;
+    /* Light text color for contrast */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1em;
+    text-align: center;
+    /* Center text */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition */
+    border-left: 1px solid #333;
+    /* Border between items */
+    border-right: 1px solid #333;
+}
+
+nav a:hover {
+    color: #1c1c1c;
+    background-color: #f0f0f0;
+    /* Invert colors on hover */
+}
+
+nav a:active {
+    color: #f0f0f0;
+    background-color: #333333;
+    /* Slightly darker active state */
+}
+
+/* Optional: Remove left border from the first item and right border from the last item for cleaner look */
+nav a:first-child {
+    border-left: none;
+}
+
+nav a:last-child {
+    border-right: none;
+}
+
+
 body {
     font-family: var(--font-family);
     font-size: var(--font-size-base);
@@ -25,6 +75,95 @@ body {
     margin: 0px;
 }
 
+/* Dark theme styling for nav */
+nav {
+    background-color: #1c1c1c;
+    /* Dark background */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    /* Adds a sharp shadow */
+}
+
+nav a {
+    flex: 1;
+    /* Makes each <a> take up equal space */
+    color: #f0f0f0;
+    /* Light text color for contrast */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1em;
+    text-align: center;
+    /* Center text */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition */
+    border-left: 1px solid #333;
+    /* Border between items */
+    border-right: 1px solid #333;
+}
+
+nav a:hover {
+    color: #1c1c1c;
+    background-color: #f0f0f0;
+    /* Invert colors on hover */
+}
+
+nav a:active {
+    color: #f0f0f0;
+    background-color: #333333;
+    /* Slightly darker active state */
+}
+
+nav a:first-child {
+    border-left: none;
+}
+
+nav a:last-child {
+    border-right: none;
+}
+
+
+footer {
+    background-color: #1c1c1c;
+    color: #f0f0f0;
+    padding: 1.5em;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin: 0;
+    padding: 0.5em 0;
+    font-weight: bold;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.social-links a {
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.social-links a:hover {
+    transform: scale(1.2);
+}
+
+
+.social-links i {
+    font-size: 24px;
+    transition: transform 0.3s;
+}
+
+.social-links i:hover {
+    transform: scale(1.2);
+}
 
 a {
     color: var(--primary-blue);
@@ -140,4 +279,11 @@ canvas {
     border-radius: 10px;
     height: 200px;
     display: block;
+}
+
+@media (width < 600px) {
+    h1 {
+        font-size: 30px;
+    }
+
 }
