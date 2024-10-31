@@ -2,7 +2,7 @@ import { GradientShaderMaterial } from './shaderMaterials/gradientShader.js';
 import { GradientShaderMovingMaterial } from './shaderMaterials/gradientShaderMoving.js';
 import { WavePatternShaderMaterial } from './shaderMaterials/wavePatternShader.js';
 import { CloudNoiseShaderMaterial } from './shaderMaterials/cloudNoiseShader.js';
-import { GoldenSpiralShaderMaterial } from './shaderMaterials/GoldenSpiralShader.js';
+import { GoldenSpiralShaderMaterial } from './shaderMaterials/goldenSpiralShader.js';
 import { WaterDanceShaderMaterial } from './shaderMaterials/waterDanceShader.js';
 import { HeaderAmbienceShaderMaterial } from './shaderMaterials/headerAmbienceShader.js';
 import { EnhancedWaterShaderMaterial } from './shaderMaterials/enhancedWaterShader.js';
