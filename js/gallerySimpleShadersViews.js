@@ -1,4 +1,4 @@
-import { shaders } from './shadersList.js';
+import { shaders } from './simpleShadersList.js';
 import { injectShaderToElement } from './shaderInjector.js';
 
 const gridContainer = document.createElement('div');

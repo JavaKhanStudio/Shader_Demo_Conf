@@ -1,11 +1,11 @@
-import { GradientShaderMaterial } from './shaderMaterials/gradientShader.js';
-import { GradientShaderMovingMaterial } from './shaderMaterials/gradientShaderMoving.js';
-import { WavePatternShaderMaterial } from './shaderMaterials/wavePatternShader.js';
-import { CloudNoiseShaderMaterial } from './shaderMaterials/cloudNoiseShader.js';
-import { GoldenSpiralShaderMaterial } from './shaderMaterials/goldenSpiralShader.js';
-import { WaterDanceShaderMaterial } from './shaderMaterials/waterDanceShader.js';
-import { HeaderAmbienceShaderMaterial } from './shaderMaterials/headerAmbienceShader.js';
-import { EnhancedWaterShaderMaterial } from './shaderMaterials/enhancedWaterShader.js';
+import { GradientShaderMaterial } from './simpleShaderMaterials/gradientShader.js';
+import { GradientShaderMovingMaterial } from './simpleShaderMaterials/gradientShaderMoving.js';
+import { WavePatternShaderMaterial } from './simpleShaderMaterials/wavePatternShader.js';
+import { CloudNoiseShaderMaterial } from './simpleShaderMaterials/cloudNoiseShader.js';
+import { GoldenSpiralShaderMaterial } from './simpleShaderMaterials/goldenSpiralShader.js';
+import { WaterDanceShaderMaterial } from './simpleShaderMaterials/waterDanceShader.js';
+import { HeaderAmbienceShaderMaterial } from './simpleShaderMaterials/headerAmbienceShader.js';
+import { EnhancedWaterShaderMaterial } from './simpleShaderMaterials/enhancedWaterShader.js';
 
 
 

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shader Shop</title>
+    <title>Document</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
     <link rel="icon" href="images/LogoSBP.ico">
@@ -16,23 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
         rel="stylesheet">
 </head>
-
 <body>
-    <script src="js/load-sections.js"></script>
-    <div id="header-placeholder"></div>
     <main>
         <script type="module" src="js/gallerySimpleShadersViews.js"></script>
-        <script type="module">
-            import { injectShaderToElement } from './js/shaderInjector.js';
-            import { shaders } from './js/simpleShadersList.js';
-            
-            loadAllSections.then(() => {
-                injectShaderToElement(shaders[1], 'header');
-            }).catch(error => console.error("Error loading sections:", error));
-        </script>
+        <script type="module" src="js/shaderInjector.js"></script>
     </main>
-    <div id="footer-placeholder"></div>
-    
 </body>
-
 </html>
