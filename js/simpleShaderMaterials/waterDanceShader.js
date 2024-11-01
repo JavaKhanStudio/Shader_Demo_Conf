@@ -3,8 +3,8 @@
 export const WaterDanceShaderMaterial = new THREE.ShaderMaterial({
     uniforms: {
         time: { value: 0.0 },
-        frequency: { value: 3.0 },
-        amplitude: { value: 0.2 },
+        frequency: { value: 1.0 },
+        amplitude: { value: 0.5 },
         speed: { value: 0.5 }
     },
     vertexShader: `

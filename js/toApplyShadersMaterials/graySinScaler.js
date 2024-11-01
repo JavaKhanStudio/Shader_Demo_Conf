@@ -1,6 +1,6 @@
 export const GraySinScalerMaterial = new THREE.ShaderMaterial({
   uniforms: {
-      uTexture: { value: null }, // Correctly define the texture uniform
+      uTexture: { value: null },
       time: { value: 0.0 }
   },
   vertexShader: `

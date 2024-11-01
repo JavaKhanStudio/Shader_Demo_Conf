@@ -1,7 +1,7 @@
 import { shaders } from './toApplyShaderList.js';
 
 const gridContainer = document.createElement('div');
-gridContainer.classList.add('shader-grid');
+gridContainer.classList.add('painter-shader-grid');
 document.querySelector('main').appendChild(gridContainer);
 
 function createShaderView(shader) {
@@ -9,13 +9,13 @@ function createShaderView(shader) {
     canvasWrapper.classList.add('shader-item');
     
     const canvas = document.createElement('canvas');
+    canvas.classList.add('painter-canvas');
     const title = document.createElement('h2');
     title.textContent = shader.name;
 
     canvasWrapper.appendChild(canvas);
     canvasWrapper.appendChild(title);
 
-    // Check if the shader has an 'intensity' uniform
     checkForIntensity();
 
     gridContainer.appendChild(canvasWrapper);
@@ -27,7 +27,7 @@ function createShaderView(shader) {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     camera.position.z = 4;
 
-    const geometry = new THREE.PlaneGeometry(6, 5);
+    const geometry = new THREE.PlaneGeometry(6, 6);
 
     // Load an image texture and apply it to the shader material
     const textureLoader = new THREE.TextureLoader();
