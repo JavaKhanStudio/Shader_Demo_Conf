@@ -22,7 +22,7 @@ export const GraySinScalerMaterial = new THREE.ShaderMaterial({
           float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
 
           // Use a sine function based on time to blend grayscale effect
-          float blendFactor = (sin(time * 2.0) + 1.0) / 2.0;
+          float blendFactor = abs((sin(time * 1.0) + 1.0) / 2.0);
           vec2 center = vec2(0.5, 0.5);
           float dist = distance(vUv, center);
 

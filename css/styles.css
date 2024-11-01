@@ -178,6 +178,10 @@ header h1 {
     -webkit-text-stroke: 1px var(--primary-red);
 }
 
+h3 {
+    margin:0px;
+}
+
 main,
 footer {
     position: relative;
@@ -242,6 +246,7 @@ header h1 {
     align-items: center;
     flex-grow: 0;
     flex-shrink: 1;
+    max-height: 100vh;
 }
 
 .shader-item h2 {
@@ -271,11 +276,14 @@ canvas {
 .header-icon, .main-icon, .footer-icon {
     width: 50px;
     height: 50px;
+    margin-left : 5px ;
+    margin-right : 5px ;
     background-size: contain; 
     background-repeat: no-repeat;
     background-position: center;
     border: none; 
     cursor: pointer; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
 }
 
 button:hover {
@@ -299,4 +307,10 @@ button:hover {
     h1 {
         font-size: 30px;
     }
+
+    .painter-shader-grid{
+        grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
+
+    }
+
 }

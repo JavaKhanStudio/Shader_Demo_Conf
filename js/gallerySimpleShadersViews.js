@@ -12,6 +12,9 @@ function createShaderView(shader) {
     const title = document.createElement('h2');
     title.textContent = shader.name;
 
+    const applyIt = document.createElement('h3');
+    applyIt.textContent = "Apply it";
+
     const buttonContainer = document.createElement('div');
     
     const headerButton = document.createElement('button');
@@ -42,6 +45,7 @@ function createShaderView(shader) {
     canvasWrapper.appendChild(canvas);
     gridContainer.appendChild(canvasWrapper);
     canvasWrapper.appendChild(title);
+    canvasWrapper.appendChild(applyIt);
     canvasWrapper.appendChild(buttonContainer);
 
 
