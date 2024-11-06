@@ -1,28 +1,64 @@
-import { shaders } from './simpleShadersList.js';
 import { injectShaderToElement } from './shaderInjector.js';
-
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const MAX_RENDERERS = isMobile ? 5 : 10;
-
-const activeRenderers = new Map();
 
 const gridContainer = document.createElement('div');
 gridContainer.classList.add('shader-grid');
 document.querySelector('main').appendChild(gridContainer);
 
+const itemsPerPage = 6;
+let currentPage = 0;
+let activeShaderViews = [];
+let shaders = [];
+
+export async function loadShaders(shaderCategory) {
+    try {
+        if (shaderCategory === 'simple') {
+            const module = await import('./simpleShaderMaterials/ZsimpleShadersList.js');
+            shaders = module.shaders;
+        } else if (shaderCategory === 'style') {
+            const module = await import('./styleShaderMaterials/ZStyleShaderList.js');
+            shaders = module.shaders;
+        }
+        prepareShaders(currentPage);
+    } catch (error) {
+        console.error('Failed to load shaders:', error);
+    }
+}
+
+function prepareShaders(currentPage) {
+    if (window.innerWidth <= 768) {
+        createPaginationControls();
+        renderShaders(currentPage);
+    } else {
+        shaders.forEach(shader => createShaderView(shader));
+    }
+}
+
+function renderShaders(page) {
+    activeShaderViews.forEach(view => view.dispose());
+    activeShaderViews = [];
+
+    gridContainer.innerHTML = '';
+    const start = page * itemsPerPage;
+    const end = Math.min(start + itemsPerPage, shaders.length);
+
+    for (let i = start; i < end; i++) {
+        const shaderView = createShaderView(shaders[i]);
+        activeShaderViews.push(shaderView);
+    }
+}
+
 function createShaderView(shader) {
     const canvasWrapper = document.createElement('div');
     canvasWrapper.classList.add('shader-item');
-
+   
     const canvas = document.createElement('canvas');
-    canvasWrapper.appendChild(canvas);
-
     const title = document.createElement('h2');
     title.textContent = shader.name;
+
     const applyIt = document.createElement('h3');
     applyIt.textContent = "Apply it";
-    const buttonContainer = document.createElement('div');
 
+    const buttonContainer = document.createElement('div');
     ['header', 'main', 'footer'].forEach(area => {
         const button = document.createElement('button');
         button.classList.add(`${area}-icon`);
@@ -33,106 +69,119 @@ function createShaderView(shader) {
         buttonContainer.appendChild(button);
     });
 
+    canvasWrapper.appendChild(canvas);
     canvasWrapper.appendChild(title);
     canvasWrapper.appendChild(applyIt);
     canvasWrapper.appendChild(buttonContainer);
     gridContainer.appendChild(canvasWrapper);
 
-    let renderer, scene, camera;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    camera.position.z = 4;
 
-    function initializeRenderer() {
-        // Reinitialize the scene, camera, and renderer if needed
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        camera.position.z = 4;
+    const geometry = new THREE.PlaneGeometry(9, 5);
+    const plane = new THREE.Mesh(geometry, shader.material);
+    scene.add(plane);
 
-        const geometry = new THREE.PlaneGeometry(9, 5);
-        const plane = new THREE.Mesh(geometry, shader.material);
-        scene.add(plane);
-
-        renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-        renderer.setPixelRatio(isMobile ? 0.5 : window.devicePixelRatio);
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    }
-
-    initializeRenderer();
+    let animationFrameId;
+    let disposed = false;
 
     function animate(time) {
-        if (!activeRenderers.has(canvasWrapper)) return;
-
-        if (shader.material.uniforms.time) {
+        if (disposed) return;
+        if (shader.material.uniforms && shader.material.uniforms.time) {
             shader.material.uniforms.time.value = time * 0.001;
         }
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
     }
+    animate();
 
-    function resizeCanvas() {
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
+    function resizeHandler() {
+        if (disposed) return;
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
     }
 
-    // Context Lost and Restore Event Handling
-    canvas.addEventListener('webglcontextlost', event => {
-        event.preventDefault(); // Prevent default to allow context restoration
-        activeRenderers.delete(canvasWrapper); // Mark this renderer as inactive
-    });
+    window.addEventListener('resize', resizeHandler);
 
-    canvas.addEventListener('webglcontextrestored', () => {
-        initializeRenderer(); // Reinitialize the renderer and scene
-        if (checkVisibility()) {
-            activeRenderers.set(canvasWrapper, { renderer, scene, camera });
-            animate();
-        }
-    });
+    function dispose() {
+        disposed = true;
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        window.removeEventListener('resize', resizeHandler);
 
-    // Visibility checking logic
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (!activeRenderers.has(canvasWrapper) && activeRenderers.size < MAX_RENDERERS) {
-                    if (!renderer) initializeRenderer(); // Initialize if needed
-                    activeRenderers.set(canvasWrapper, { renderer, scene, camera });
-                    animate();
-                }
-            } else {
-                activeRenderers.delete(canvasWrapper);
+        if (plane.material) {
+            if (plane.material.uniforms && plane.material.uniforms.texture) {
+                plane.material.uniforms.texture.value.dispose();
             }
-        });
-    }, {
-        rootMargin: '100px',
-        threshold: 0.1,
-    });
+            plane.material.dispose();
+        }
 
-    observer.observe(canvasWrapper);
+        plane.geometry.dispose();
+        scene.remove(plane);
+        renderer.dispose();
 
-    function checkVisibility() {
-        const rect = canvasWrapper.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-
-    function visibilityFallback() {
-        if (checkVisibility() && !activeRenderers.has(canvasWrapper) && activeRenderers.size < MAX_RENDERERS) {
-            if (!renderer) initializeRenderer(); // Initialize if needed
-            activeRenderers.set(canvasWrapper, { renderer, scene, camera });
-            animate();
-        } else {
-            activeRenderers.delete(canvasWrapper);
+        if (canvasWrapper.parentElement) {
+            canvasWrapper.parentElement.removeChild(canvasWrapper);
         }
     }
 
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('resize', visibilityFallback);
-    window.addEventListener('scroll', visibilityFallback);
+    return { dispose };
 }
 
-// Create shader views
-shaders.forEach(shader => createShaderView(shader));
+function createPaginationControls() {
+    const paginationContainerTop = document.createElement('div');
+    paginationContainerTop.classList.add('pagination-controls');
+
+    const paginationContainerBottom = paginationContainerTop.cloneNode(false); 
+
+    const prevButtonTop = document.createElement('button');
+    prevButtonTop.classList.add('previous');
+    prevButtonTop.textContent = 'Previous';
+
+    const nextButtonTop = document.createElement('button');
+    nextButtonTop.classList.add('next');
+    nextButtonTop.textContent = 'Next';
+
+    const prevButtonBottom = prevButtonTop.cloneNode(true);
+    const nextButtonBottom = nextButtonTop.cloneNode(true);
+
+    [prevButtonTop, prevButtonBottom].forEach(button => {
+        button.addEventListener('click', () => {
+            currentPage = Math.max(0, currentPage - 1);
+            renderShaders(currentPage);
+            setButtonState();
+        });
+    });
+
+    [nextButtonTop, nextButtonBottom].forEach(button => {
+        button.addEventListener('click', () => {
+            currentPage = Math.min(Math.ceil(shaders.length / itemsPerPage) - 1, currentPage + 1);
+            renderShaders(currentPage);
+            setButtonState();
+        });
+    });
+
+    paginationContainerTop.appendChild(prevButtonTop);
+    paginationContainerTop.appendChild(nextButtonTop);
+    paginationContainerBottom.appendChild(prevButtonBottom);
+    paginationContainerBottom.appendChild(nextButtonBottom);
+
+    const mainElement = document.querySelector('main');
+    mainElement.prepend(paginationContainerTop);
+    mainElement.appendChild(paginationContainerBottom);
+
+    setButtonState();
+
+    function setButtonState() {
+        const disablePrev = currentPage === 0;
+        const disableNext = currentPage >= Math.ceil(shaders.length / itemsPerPage) - 1;
+
+        [prevButtonTop, prevButtonBottom].forEach(button => button.disabled = disablePrev);
+        [nextButtonTop, nextButtonBottom].forEach(button => button.disabled = disableNext);
+    }
+}
+
+

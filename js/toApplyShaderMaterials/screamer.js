@@ -50,9 +50,13 @@ export const ScreamerMaterial = new THREE.ShaderMaterial({
             // Get the texture color with distortion
             vec4 color = texture2D(uTexture, distortedUv);
 
-            // Adding color shift effect
-            color.r += sin(time * 2.0) * 0.02;
-            color.b += cos(time * 2.0) * 0.02;
+            // Emphasize yellows above a threshold
+            if(color.r > 0.4 && color.g > 0.4 && color.b < .4)
+            {
+                color.r = color.r + ((color.r * intensity) / 6.0) * abs(sin(time)) ; 
+                color.g = color.g + ((color.g * intensity) / 6.0) * abs(sin(time)); 
+                color.b = color.b - ((color.b * intensity) / 4.0) * abs(sin(time * 2.0)); 
+            }
 
             gl_FragColor = vec4(color.rgb, color.a);
         }

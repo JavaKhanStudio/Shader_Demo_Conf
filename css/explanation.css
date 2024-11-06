@@ -1,0 +1,93 @@
+/* Global Styles */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Top Section */
+#topSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#topSection button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#topSection h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* Shader and Explanation Section */
+#shaderAndExplanation {
+    display: flex ;
+    flex-direction: column;
+}
+
+#explanation {
+    grid-column: span 2;
+}
+
+#titleSection{
+    flex-basis: 70%;
+}
+
+#presentinSection, #fragmentSection, #vertexSection {
+    display : flex;
+    flex-direction: column;
+}
+
+#presentingShader {
+    grid-column: 1 / span 2;
+    height: 300px; 
+}
+
+#explanationSection,#framentSection, #vertexSection {
+    display:flex;
+    flex-direction: column;
+}
+
+pre {
+    overflow-x: auto; 
+}
+
+pre code {
+    padding: 1em;
+    border-radius: 5px;
+    font-family: monospace;
+
+    overflow-x: auto;
+    max-height: 400px; 
+    max-width: 90vw; 
+    box-sizing: border-box; 
+}
+
+
+/* Mobile Responsive Layout */
+@media (max-width: 768px) {
+    #shaderAndExplanation {
+        grid-template-columns: 1fr;
+    }
+
+    #topSection {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #topSection button {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #presentingShader {
+        height: 250px;
+    }
+}

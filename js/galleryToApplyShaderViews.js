@@ -1,4 +1,4 @@
-import { shaders } from './toApplyShaderList.js';
+import { shaders } from './toApplyShaderMaterials/ZtoApplyShaderList.js';
 
 const gridContainer = document.createElement('div');
 gridContainer.classList.add('painter-shader-grid');

@@ -21,16 +21,9 @@
     <main>
         <script type="module">
             import {loadShaders} from "./js/gallerySimpleShadersViews.js" ;
-            loadShaders("simple") ; 
+            loadShaders("style") ; 
         </script>
-        <script type="module">
-            import { injectShaderToElement } from './js/shaderInjector.js';
-            import { shaders } from './js/simpleShaderMaterials/ZsimpleShadersList.js';
-            
-            loadAllSections.then(() => {
-                injectShaderToElement(shaders[1], 'header');
-            }).catch(error => console.error("Error loading sections:", error));
-        </script>
+        
     </main>
     <div id="footer-placeholder"></div>
     

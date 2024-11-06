@@ -1,5 +1,5 @@
-import { GraySinScalerMaterial } from './toApplyShadersMaterials/graySinScaler.js';
-import { ScreamerMaterial } from './toApplyShadersMaterials/screamer.js';
+import { GraySinScalerMaterial } from './graySinScaler.js';
+import { ScreamerMaterial } from './screamer.js';
 
 
 export const shaders = [

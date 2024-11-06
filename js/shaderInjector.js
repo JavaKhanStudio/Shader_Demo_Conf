@@ -1,4 +1,4 @@
-import { shaders } from './simpleShadersList.js';
+import { shaders } from './simpleShaderMaterials/ZsimpleShadersList.js';
 
 const elementMap = {}; // Store unique configurations for each element selector
 

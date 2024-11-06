@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shader Shop</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/explanation.css">
+
     <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
     <link rel="icon" href="images/LogoSBP.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -14,23 +15,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
         rel="stylesheet">
 </head>
-
 <body>
     <script src="js/load-sections.js"></script>
     <div id="header-placeholder"></div>
     <main>
-        <script type="module" src="js/gallerySimpleShadersViews.js"></script>
-        <script type="module">
-            import { injectShaderToElement } from './js/shaderInjector.js';
-            import { shaders } from './js/simpleShadersList.js';
-            
-            loadAllSections.then(() => {
-                injectShaderToElement(shaders[1], 'header');
-            }).catch(error => console.error("Error loading sections:", error));
-        </script>
+        <div id="topSection">
+            <button id="previousButton"><- Previous</button>
+            <div id="titleSection">
+                <h2 id="currentTitle">Title</h2>
+                <div id="explanationList"></div>
+            </div>
+            <button id="nextButton">Next -></button>
+        </div>
+        <div id="shaderAndExplanation">
+            <div id="explanationSection">
+                <h2>Code Explanation</h2>
+                <textarea id="explanation"></textarea>
+            </div>
+            <div id="presentingShader"></div>
+            <div id="framentSection">
+                <h2>Fragment Code</h2>
+                <pre><code id="fragmentCode" class="language-glsl"></code></pre>
+            </div>
+            <div id="vertexSection">
+                <h2>Vertex Code</h2>
+                <pre><code id="vertexCode" class="language-glsl"></code></pre>
+            </div>
+        </div>
     </main>
-    <div id="footer-placeholder"></div>
-    
-</body>
 
+
+    <div id="footer-placeholder"></div>
+    <script type="module" src="js/galleryExplanationShader.js"></script>
+</body>
 </html>
