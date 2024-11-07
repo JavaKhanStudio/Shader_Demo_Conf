@@ -1,6 +1,3 @@
-// load-sections.js
-// load-sections.js
-
 function loadSection(id, url) {
     return fetch(url)
       .then(response => response.text())

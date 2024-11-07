@@ -168,6 +168,10 @@ header {
     align-items: center;
 }
 
+header img {
+    height: 90%;
+}
+
 header h1 {
     text-align: center;
     position: relative;

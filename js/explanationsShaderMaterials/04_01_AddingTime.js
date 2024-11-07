@@ -1,7 +1,7 @@
 export const AddingTimeMaterial = new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
-    speed: { value: 0.2 }
+    speed: { value: 0.8 }
   },  
   vertexShader: `
     varying vec2 vUv;
@@ -16,13 +16,12 @@ export const AddingTimeMaterial = new THREE.ShaderMaterial({
     uniform float speed;
     
     void main() {
-      
-      float sinTimeMovement = abs(cos(time * speed)) ;
+      // Create a color that changes over time
+      float animatedValue = sin(time * speed);  // Oscillates between -1 and 1
+      vec3 color = vec3(vUv.x, animatedValue, 0.0); 
 
-      // Calculate the color based on inRange
-      vec3 color = vec3(vUv.y - sinTimeMovement, 0.0, 1.0 - vUv.x) ; 
-
+      // Display the color
       gl_FragColor = vec4(color, 1.0);
     }
   `
-  });
+});

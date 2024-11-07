@@ -1,4 +1,4 @@
-export const OptimisationMaterial = new THREE.ShaderMaterial({
+export const PerpectiveTimeMaterial = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0.0 }
       },
@@ -8,7 +8,7 @@ export const OptimisationMaterial = new THREE.ShaderMaterial({
           
           void main() {
             vUv = uv;
-            float animatedW = 0.5 + 0.5 * sin(time);
+            float animatedW = 1.0 - (0.33 * sin(time * 0.5));
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, animatedW);
           }
       `,

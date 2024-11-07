@@ -31,7 +31,6 @@ function createShaderView(shader) {
 
     // Load an image texture and apply it to the shader material
     const textureLoader = new THREE.TextureLoader();
-    console.log(shader.baseImage);
     textureLoader.load(shader.baseImage, (texture) => {
         shader.material.uniforms.uTexture = { value: texture };
 

@@ -14,6 +14,17 @@ main {
     margin-bottom: 20px;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* TODO finish later */
+#explanationSection {
+    display: none;
+}
+
 #topSection button {
     padding: 10px 20px;
     font-size: 16px;
@@ -39,20 +50,15 @@ main {
     flex-basis: 70%;
 }
 
-#presentinSection, #fragmentSection, #vertexSection {
+.compartement {
     display : flex;
     flex-direction: column;
 }
 
 #presentingShader {
-    grid-column: 1 / span 2;
-    height: 300px; 
+    height: 40vw; 
 }
 
-#explanationSection,#framentSection, #vertexSection {
-    display:flex;
-    flex-direction: column;
-}
 
 pre {
     overflow-x: auto; 
@@ -60,10 +66,9 @@ pre {
 
 pre code {
     padding: 1em;
+    overflow-x: auto; 
     border-radius: 5px;
     font-family: monospace;
-
-    overflow-x: auto;
     max-height: 400px; 
     max-width: 90vw; 
     box-sizing: border-box; 

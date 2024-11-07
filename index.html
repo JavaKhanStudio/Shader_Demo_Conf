@@ -28,18 +28,26 @@
             <button id="nextButton">Next -></button>
         </div>
         <div id="shaderAndExplanation">
-            <div id="explanationSection">
+            <div id="explanationSection" class="compartement">
                 <h2>Code Explanation</h2>
                 <textarea id="explanation"></textarea>
             </div>
             <div id="presentingShader"></div>
-            <div id="framentSection">
+            <div class="compartement">
+                <h2>Data Points</h2>
+                <div></div>
+            </div>
+            <div id="framentSection" class="compartement">
                 <h2>Fragment Code</h2>
                 <pre><code id="fragmentCode" class="language-glsl"></code></pre>
             </div>
-            <div id="vertexSection">
+            <div id="vertexSection" class="compartement">
                 <h2>Vertex Code</h2>
                 <pre><code id="vertexCode" class="language-glsl"></code></pre>
+            </div>
+            <div id="jsSection" class="compartement">
+                <h2>Javascript Code</h2>
+                <pre><code id="jsCode" class="language-javascript"></code></pre>
             </div>
         </div>
     </main>
