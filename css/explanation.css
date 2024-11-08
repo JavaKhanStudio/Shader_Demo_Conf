@@ -14,11 +14,6 @@ main {
     margin-bottom: 20px;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 /* TODO finish later */
 #explanationSection {
@@ -38,7 +33,7 @@ header {
 
 /* Shader and Explanation Section */
 #shaderAndExplanation {
-    display: flex ;
+    display: flex;
     flex-direction: column;
 }
 
@@ -46,32 +41,32 @@ header {
     grid-column: span 2;
 }
 
-#titleSection{
+#titleSection {
     flex-basis: 70%;
 }
 
 .compartement {
-    display : flex;
+    display: flex;
     flex-direction: column;
 }
 
 #presentingShader {
-    height: 40vw; 
+    height: 40vw;
 }
 
 
 pre {
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 
 pre code {
     padding: 1em;
-    overflow-x: auto; 
+    overflow-x: auto;
     border-radius: 5px;
     font-family: monospace;
-    max-height: 400px; 
-    max-width: 90vw; 
-    box-sizing: border-box; 
+    max-height: 400px;
+    max-width: 90vw;
+    box-sizing: border-box;
 }
 
 

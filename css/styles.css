@@ -18,7 +18,7 @@
 
 nav {
     background-color: #1c1c1c;
-    
+
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -27,7 +27,7 @@ nav {
 
 nav a {
     flex: 1;
-    
+
     color: #f0f0f0;
 
     text-decoration: none;
@@ -36,9 +36,9 @@ nav a {
     text-align: center;
 
     transition: background-color 0.3s, color 0.3s;
- 
+
     border-left: 1px solid #333;
-    
+
     border-right: 1px solid #333;
 }
 
@@ -110,7 +110,7 @@ nav a:last-child {
 
 
 footer {
-    background-color: #1c1c1c;
+    background-color: #1c1c1c34;
     color: #f0f0f0;
     padding: 1.5em;
     text-align: center;
@@ -183,7 +183,7 @@ header h1 {
 }
 
 h3 {
-    margin:0px;
+    margin: 0px;
 }
 
 main,
@@ -212,7 +212,7 @@ footer {
     padding: 50px;
 }
 
-.painter-shader-grid{
+.painter-shader-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 30px;
@@ -272,7 +272,7 @@ canvas {
 }
 
 .painter-canvas {
-    height:auto ;
+    height: auto;
     aspect-ratio: 1 / 1;
     border-radius: 0px;
 }
@@ -307,16 +307,18 @@ canvas {
 
 
 
-.header-icon, .main-icon, .footer-icon {
+.header-icon,
+.main-icon,
+.footer-icon {
     width: 50px;
     height: 50px;
-    margin-left : 5px ;
-    margin-right : 5px ;
-    background-size: contain; 
+    margin-left: 5px;
+    margin-right: 5px;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border: none; 
-    cursor: pointer; 
+    border: none;
+    cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
 }
 
@@ -342,7 +344,7 @@ button:hover {
         font-size: 55px !important;
     }
 
-    .painter-shader-grid{
+    .painter-shader-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
 
     }

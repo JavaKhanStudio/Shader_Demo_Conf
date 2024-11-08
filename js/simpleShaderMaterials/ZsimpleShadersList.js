@@ -6,8 +6,8 @@ import { GoldenSpiralShaderMaterial } from './goldenSpiralShader.js';
 import { WaterDanceShaderMaterial } from './waterDanceShader.js';
 import { HeaderAmbienceShaderMaterial } from './headerAmbienceShader.js';
 import { EnhancedWaterShaderMaterial } from './enhancedWaterShader.js';
-import { TrigGraphMaterial } from './trigGraph.js';
-
+import { ShaderArtMaterial } from './shaderArt.js';
+import { PhantomStarMaterial } from './phantomStar.js';
 
 
 export const shaders = [
@@ -23,7 +23,20 @@ export const shaders = [
         description: '',
         author: 'Chat GPT',
     },
-
+    {
+        name: 'Shader Art',
+        material: ShaderArtMaterial,
+        description: '',
+        author: ' kishimisu ',
+        ref: "https://www.shadertoy.com/view/mtyGWy"
+    },
+    {
+        name: 'Phantom Star',
+        material: PhantomStarMaterial,
+        description: '',
+        author: ' kasari39',
+        ref: "https://www.shadertoy.com/view/ttKGDt"
+    },
     {
         name: 'Water Dance',
         material: WaterDanceShaderMaterial,

@@ -50,7 +50,7 @@ function renderShaders(page) {
 function createShaderView(shader) {
     const canvasWrapper = document.createElement('div');
     canvasWrapper.classList.add('shader-item');
-   
+
     const canvas = document.createElement('canvas');
     const title = document.createElement('h2');
     title.textContent = shader.name;
@@ -93,6 +93,10 @@ function createShaderView(shader) {
         if (shader.material.uniforms && shader.material.uniforms.time) {
             shader.material.uniforms.time.value = time * 0.001;
         }
+        if (shader.material.uniforms && shader.material.uniforms.iResolution) {
+            shader.material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight, 1.0);
+        }
+
         renderer.render(scene, camera);
         animationFrameId = requestAnimationFrame(animate);
     }
@@ -135,7 +139,7 @@ function createPaginationControls() {
     const paginationContainerTop = document.createElement('div');
     paginationContainerTop.classList.add('pagination-controls');
 
-    const paginationContainerBottom = paginationContainerTop.cloneNode(false); 
+    const paginationContainerBottom = paginationContainerTop.cloneNode(false);
 
     const prevButtonTop = document.createElement('button');
     prevButtonTop.classList.add('previous');

@@ -11,6 +11,9 @@ export function injectShaderToElement(shader, elementSelector) {
         return;
     }
 
+    console.log(elementSelector.style);
+    targetElement.style.setProperty("background-color", "");
+
     if (!elementMap[elementSelector]) {
         elementMap[elementSelector] = {
             canvas: document.createElement('canvas'),
@@ -72,5 +75,5 @@ export function injectShaderToElement(shader, elementSelector) {
 }
 
 window.injections = new Promise((resolve, reject) => {
-    injectShaderToElement(shaders[1], 'header'); 
+    injectShaderToElement(shaders[1], 'header');
 });
