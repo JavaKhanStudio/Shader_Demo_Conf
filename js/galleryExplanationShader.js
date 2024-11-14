@@ -1,9 +1,15 @@
 let shaders = [];
 let currentLang;
 let currentIndex = 0;
-export async function loadExplanations(explanationToLoad, currentLangSelect = "ENG", selectedPage = 0) {
-    currentLang = currentLangSelect;
-    currentIndex = selectedPage;
+export async function loadExplanations(explanationToLoad) {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    currentIndex = parseInt(urlParams.get("page")) || 0;
+
+    // TODO PUT IN SESSION STORAGE
+    currentLang = urlParams.get("lang") || "ENG";
+
+
     try {
         if (explanationToLoad === 'basics') {
             const module = await import('./explanationsShaderMaterials/explanationList.js');
