@@ -1,28 +1,25 @@
-let isAnalyzing = false; // Flag to track if analysis is active
-let intervalId;           // Variable to store the interval ID for stopping the process
-let dominantFrequencyHistory = []; // Array to store dominant frequencies over time
+let isAnalyzing = false;
+let intervalId;
+let dominantFrequencyHistory = [];
 
 // Create the checkbox
 const checkbox = document.createElement("input");
 checkbox.type = "checkbox";
 checkbox.id = "analyzeToggle";
 
-// Create a label for the checkbox
 const label = document.createElement("label");
 label.htmlFor = "analyzeToggle";
 label.textContent = "Enable Audio Analysis";
 
-// Append the checkbox and label to the body (or any other container)
-document.body.appendChild(checkbox);
-document.body.appendChild(label);
+let paramsSpace = document.querySelector('#params')
+paramsSpace.appendChild(checkbox);
+paramsSpace.appendChild(label);
 
-// Add an event listener to handle start/stop analysis
 checkbox.addEventListener("change", (event) => {
     isAnalyzing = event.target.checked;
-
-    // Start or stop analysis based on checkbox state
     if (isAnalyzing) {
         startAnalysis();
+        window.AudioAnalysisData.micIsOn = true;
     } else {
         stopAnalysis();
     }
@@ -31,75 +28,96 @@ checkbox.addEventListener("change", (event) => {
 function startAnalysis() {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
 
-    // Access the microphone stream
+    // Adjust FFT size for better frequency resolution
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.3; // Add smoothing to reduce jitter
+
+    const bufferLength = analyser.frequencyBinCount;
+    const timeDataArray = new Float32Array(bufferLength); // Use Float32Array for time domain
+    const freqDataArray = new Uint8Array(bufferLength);   // Use Uint8Array for frequency domain
+
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
             const source = audioContext.createMediaStreamSource(stream);
             source.connect(analyser);
 
-            // Set up the interval to analyze sound
-            intervalId = setInterval(() => analyzeSound(analyser, dataArray, bufferLength, audioContext), 100); // Every 100 ms
+            // Increase sampling rate for more responsive analysis
+            intervalId = setInterval(() => analyzeSound(analyser, timeDataArray, freqDataArray, bufferLength, audioContext), 50);
         })
         .catch(error => console.error("Microphone access denied:", error));
 }
 
 function stopAnalysis() {
-    clearInterval(intervalId); // Stop the interval
-    dominantFrequencyHistory = []; // Clear the history
+    clearInterval(intervalId);
+    dominantFrequencyHistory = [];
+    isAnalyzing = false;
+    setBasicData();
     console.log("Analysis stopped.");
 }
 
-function analyzeSound(analyser, dataArray, bufferLength, audioContext) {
-    if (!isAnalyzing) return; // Exit if analysis is turned off
+window.AudioAnalysisData = {
+    amplitude: 0,
+    dominantFrequency: 0,
+    bandAmplitudes: [],
+    micIsOn: false
+};
 
-    analyser.getByteFrequencyData(dataArray);
-    analyser.getByteTimeDomainData(dataArray);
+function setBasicData() {
+    window.AudioAnalysisData.amplitude = 0; // Changed from 128 to 0 as default
+    window.AudioAnalysisData.dominantFrequency = 0;
+    window.AudioAnalysisData.bandAmplitudes = [];
+    window.AudioAnalysisData.micIsOn = false;
+}
 
-    // Calculate Amplitude
-    const amplitude = dataArray.reduce((a, b) => a + b, 0) / bufferLength;
-    console.log("Amplitude:", amplitude);
+export function analyzeSound(analyser, timeDataArray, freqDataArray, bufferLength, audioContext) {
+    if (!isAnalyzing) return;
+
+    // Get both time domain and frequency domain data
+    analyser.getFloatTimeDomainData(timeDataArray);  // Use getFloatTimeDomainData instead
+    analyser.getByteFrequencyData(freqDataArray);
+
+    // Calculate RMS amplitude from time domain data
+    const amplitude = calculateRMS(timeDataArray);
+    window.AudioAnalysisData.amplitude = amplitude;
+
 
     // Get Dominant Frequency
-    const dominantFrequency = getDominantFrequency(analyser, dataArray, audioContext);
-
-    // Store the dominant frequency in the history for the last 2 seconds (20 intervals)
-    dominantFrequencyHistory.push(dominantFrequency);
-    if (dominantFrequencyHistory.length > 20) {
-        dominantFrequencyHistory.shift(); // Remove the oldest entry to keep history to 2 seconds
-    }
-
-    // Calculate the average dominant frequency over the last 2 seconds
-    const avgDominantFrequency = dominantFrequencyHistory.reduce((a, b) => a + b, 0) / dominantFrequencyHistory.length;
-    console.log("Average Dominant Frequency (Last 2 seconds):", avgDominantFrequency);
+    const dominantFrequency = getDominantFrequency(analyser, freqDataArray, audioContext);
+    window.AudioAnalysisData.dominantFrequency = dominantFrequency;
 
     // 6-Band Frequency Analysis
     const bands = 6;
     const bandWidth = Math.floor(bufferLength / bands);
-    let bandAmplitudes = [];
+    window.AudioAnalysisData.bandAmplitudes = [];
 
     for (let i = 0; i < bands; i++) {
         const start = i * bandWidth;
         const end = start + bandWidth;
-        const bandAverage = dataArray.slice(start, end).reduce((a, b) => a + b, 0) / bandWidth;
-        bandAmplitudes.push(bandAverage);
+        const bandAverage = freqDataArray.slice(start, end).reduce((a, b) => a + b, 0) / bandWidth;
+        window.AudioAnalysisData.bandAmplitudes.push(bandAverage);
     }
+}
 
-    console.log("6-Band Frequency Amplitudes:", bandAmplitudes);
+function calculateRMS(timeDataArray) {
+    // Calculate RMS from float time domain data
+    const squareSum = timeDataArray.reduce((sum, sample) => sum + sample * sample, 0);
+    const rms = Math.sqrt(squareSum / timeDataArray.length);
+    return rms;
 }
 
 function getDominantFrequency(analyser, dataArray, audioContext) {
-    analyser.getByteFrequencyData(dataArray);
     let maxIndex = 0;
-    for (let i = 1; i < dataArray.length; i++) {
-        if (dataArray[i] > dataArray[maxIndex]) {
+    let maxValue = -Infinity;
+
+    // Find the frequency bin with maximum amplitude
+    for (let i = 0; i < dataArray.length; i++) {
+        if (dataArray[i] > maxValue) {
+            maxValue = dataArray[i];
             maxIndex = i;
         }
     }
+
     const dominantFrequency = maxIndex * audioContext.sampleRate / analyser.fftSize;
-    console.log("Dominant Frequency:", dominantFrequency);
-    return dominantFrequency;
+    return Math.round(dominantFrequency);
 }

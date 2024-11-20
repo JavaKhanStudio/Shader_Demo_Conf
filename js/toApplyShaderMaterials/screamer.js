@@ -1,6 +1,6 @@
 export const ScreamerMaterial = new THREE.ShaderMaterial({
     uniforms: {
-        uTexture: { value: null },
+        uTexture_1: { value: null },
         time: { value: 0.0 },
         intensity: { value: 1. }
     },
@@ -13,7 +13,7 @@ export const ScreamerMaterial = new THREE.ShaderMaterial({
     `,
     fragmentShader: `
         uniform float time;
-        uniform sampler2D uTexture;
+        uniform sampler2D uTexture_1;
         uniform float intensity;
         varying vec2 vUv;
 
@@ -48,7 +48,7 @@ export const ScreamerMaterial = new THREE.ShaderMaterial({
             );
 
             // Get the texture color with distortion
-            vec4 color = texture2D(uTexture, distortedUv);
+            vec4 color = texture2D(uTexture_1, distortedUv);
 
             // Emphasize yellows above a threshold
             if(color.r > 0.4 && color.g > 0.4 && color.b < .4)

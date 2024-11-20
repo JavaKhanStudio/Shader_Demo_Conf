@@ -1,6 +1,7 @@
 let shaders = [];
 let currentLang;
 let currentIndex = 0;
+let asSounds = false;
 export async function loadExplanations(explanationToLoad) {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -9,7 +10,6 @@ export async function loadExplanations(explanationToLoad) {
     // TODO PUT IN SESSION STORAGE
     currentLang = urlParams.get("lang") || "ENG";
 
-
     try {
         if (explanationToLoad === 'basics') {
             const module = await import('./explanationsShaderMaterials/explanationList.js');
@@ -17,58 +17,62 @@ export async function loadExplanations(explanationToLoad) {
         } else if (explanationToLoad === 'music') {
             const module = await import('./explanationsSoundsShadersMaterials/soundsExplanationList.js');
             shaders = module.shaders;
+            asSounds = true;
         }
 
         generateHTML();
         addInteractions();
         loadShader(currentIndex);
+
+        if (asSounds) {
+            const moduleSounds = await import('./audioInputs.js');
+        }
+
+
     } catch (error) {
         console.error('Failed to load shaders:', error);
     }
 }
 
 
-
-
 function addInteractions() {
-    document.addEventListener("DOMContentLoaded", function () {
-        const mouse = new THREE.Vector2();
-        const raycaster = new THREE.Raycaster();
 
-        document.addEventListener('mousemove', (event) => {
-            if (!renderer || !material || !material.uniforms || !material.uniforms.mousePosition) {
-                return;
+    const mouse = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
+
+    document.addEventListener('mousemove', (event) => {
+        if (!renderer || !material || !material.uniforms || !material.uniforms.mousePosition) {
+            return;
+        }
+
+        if (currentShader.preciseMouse) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersects = raycaster.intersectObject(plane);
+
+            if (intersects.length > 0) {
+                // Get intersection point in plane coordinates
+                const intersectPoint = intersects[0].point;
+
+                const planeSize = new THREE.Vector2(9, 6);
+                const uvX = (intersectPoint.x + planeSize.x / 2) / planeSize.x;
+                const uvY = (intersectPoint.y + planeSize.y / 2) / planeSize.y;
+
+                material.uniforms.mousePosition.value.set(uvX, uvY);
             }
+        } else {
+            const rect = renderer.domElement.getBoundingClientRect();
 
-            if (currentShader.preciseMouse) {
-                const rect = renderer.domElement.getBoundingClientRect();
-                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            const mouseX = (event.clientX - rect.left) / rect.width;
+            const mouseY = 1.0 - (event.clientY - rect.top) / rect.height;
 
-                raycaster.setFromCamera(mouse, camera);
+            material.uniforms.mousePosition.value.set(mouseX, mouseY);
+        }
 
-                const intersects = raycaster.intersectObject(plane);
-
-                if (intersects.length > 0) {
-                    // Get intersection point in plane coordinates
-                    const intersectPoint = intersects[0].point;
-
-                    const planeSize = new THREE.Vector2(9, 6);
-                    const uvX = (intersectPoint.x + planeSize.x / 2) / planeSize.x;
-                    const uvY = (intersectPoint.y + planeSize.y / 2) / planeSize.y;
-
-                    material.uniforms.mousePosition.value.set(uvX, uvY);
-                }
-            } else {
-                const rect = renderer.domElement.getBoundingClientRect();
-
-                const mouseX = (event.clientX - rect.left) / rect.width;
-                const mouseY = 1.0 - (event.clientY - rect.top) / rect.height;
-
-                material.uniforms.mousePosition.value.set(mouseX, mouseY);
-            }
-
-        });
     });
 
 
@@ -129,6 +133,18 @@ async function renderShader(shader) {
         if (material.uniforms && material.uniforms.time) {
             material.uniforms.time.value = time * 0.001;
         }
+        if (asSounds && window.AudioAnalysisData) {
+            if (material.uniforms.amplitude) {
+                material.uniforms.amplitude.value = window.AudioAnalysisData.amplitude;
+            }
+            if (material.uniforms.dominantFrequency) {
+                material.uniforms.dominantFrequency.value = window.AudioAnalysisData.dominantFrequency;
+            }
+            if (material.uniforms.bandAmplitudes) {
+                material.uniforms.bandAmplitudes.value = window.AudioAnalysisData.bandAmplitudes;
+            }
+        }
+
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     }
@@ -254,6 +270,7 @@ function generateHTML() {
     dataPointsSection.appendChild(dataPointsHeading);
 
     const dataPointsContent = document.createElement("div");
+    dataPointsContent.id = "params";
     dataPointsSection.appendChild(dataPointsContent);
 
     shaderAndExplanation.appendChild(dataPointsSection);
@@ -317,6 +334,3 @@ function generateHTML() {
     mainSection.appendChild(topSection);
     mainSection.appendChild(shaderAndExplanation);
 }
-
-
-

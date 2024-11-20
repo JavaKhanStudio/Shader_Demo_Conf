@@ -1,22 +1,22 @@
 export const GraySinScalerMaterial = new THREE.ShaderMaterial({
-  uniforms: {
-      uTexture: { value: null },
-      time: { value: 0.0 }
-  },
-  vertexShader: `
+    uniforms: {
+        uTexture_1: { value: null },
+        time: { value: 0.0 }
+    },
+    vertexShader: `
       varying vec2 vUv;
       void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
   `,
-  fragmentShader: `
+    fragmentShader: `
       uniform float time;
-      uniform sampler2D uTexture;
+      uniform sampler2D uTexture_1;
       varying vec2 vUv;
 
       void main() {
-          vec4 color = texture2D(uTexture, vUv);
+          vec4 color = texture2D(uTexture_1, vUv);
 
           // Calculate grayscale value
           float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));

@@ -7,7 +7,7 @@ document.querySelector('main').appendChild(gridContainer);
 function createShaderView(shader) {
     const canvasWrapper = document.createElement('div');
     canvasWrapper.classList.add('shader-item');
-    
+
     const canvas = document.createElement('canvas');
     canvas.classList.add('painter-canvas');
     const title = document.createElement('h2');
@@ -29,10 +29,46 @@ function createShaderView(shader) {
 
     const geometry = new THREE.PlaneGeometry(6, 6);
 
-    // Load an image texture and apply it to the shader material
+    // Load textures dynamically if available
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(shader.baseImage, (texture) => {
-        shader.material.uniforms.uTexture = { value: texture };
+    const texturePaths = [
+        shader.baseImage,       // uTexture_1
+        shader.optionalImage2,  // uTexture_2 (if exists)
+        shader.optionalImage3   // uTexture_3 (if exists)
+    ];
+    const textureUniformNames = ["uTexture_1", "uTexture_2", "uTexture_3"];
+
+    const loadedTextures = {};
+    let texturesToLoad = texturePaths.filter(Boolean).length; // Only count non-null paths
+
+    if (texturesToLoad === 0) {
+        initializeShader(); // No textures to load, directly initialize the shader
+    } else {
+        texturePaths.forEach((path, index) => {
+            if (path) {
+                textureLoader.load(path, (texture) => {
+                    texture.minFilter = THREE.NearestFilter;
+                    texture.magFilter = THREE.NearestFilter;
+                    texture.wrapS = THREE.ClampToEdgeWrapping;
+                    texture.wrapT = THREE.ClampToEdgeWrapping;
+
+                    loadedTextures[textureUniformNames[index]] = { value: texture };
+                    texturesToLoad--;
+
+                    if (texturesToLoad === 0) {
+                        initializeShader(); // All textures are loaded
+                    }
+                });
+            }
+        });
+    }
+
+    function initializeShader() {
+        // Assign loaded textures to the material's uniforms
+        shader.material.uniforms = {
+            ...shader.material.uniforms, // Preserve existing uniforms
+            ...loadedTextures            // Add dynamically loaded texture uniforms
+        };
 
         const plane = new THREE.Mesh(geometry, shader.material);
         scene.add(plane);
@@ -43,11 +79,12 @@ function createShaderView(shader) {
             }
 
             requestAnimationFrame(animate);
+            renderer.setClearAlpha(0);
             renderer.render(scene, camera);
         }
 
         animate();
-    });
+    }
 
     window.addEventListener('resize', () => {
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -62,7 +99,7 @@ function createShaderView(shader) {
             intensityLabel.style.display = 'block';
 
             const intensitySlider = document.createElement('input');
-            let baseIntensity = shader.material.uniforms.intensity.value ; 
+            let baseIntensity = shader.material.uniforms.intensity.value;
             intensitySlider.type = 'range';
             intensitySlider.min = 0;
             intensitySlider.max = baseIntensity * 2;
