@@ -7,6 +7,10 @@ import { WaterDanceShaderMaterial } from './waterDanceShader.js';
 import { HeaderAmbienceShaderMaterial } from './headerAmbienceShader.js';
 import { EnhancedWaterShaderMaterial } from './enhancedWaterShader.js';
 import { ShaderArtMaterial } from './shaderArt.js';
+import { MonsterMaterial } from './monster.js';
+import { TunnelMaterial } from './tunnel.js';
+import { TunnelMaterialV2 } from './tunnelV2.js';
+
 import { PhantomStarMaterial } from './phantomStar.js';
 
 
@@ -29,6 +33,13 @@ export const shaders = [
         description: '',
         author: ' kishimisu ',
         ref: "https://www.shadertoy.com/view/mtyGWy"
+    },
+    {
+        name: 'Monster',
+        material: MonsterMaterial,
+        description: '',
+        author: 'butadiene',
+        ref: "https://www.shadertoy.com/view/WtKSzt"
     },
     {
         name: 'Phantom Star',

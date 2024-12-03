@@ -90,6 +90,11 @@ function createShaderView(shader) {
 
     function animate(time) {
         if (disposed) return;
+
+        // Set iTime cause i am lazy
+        if (shader.material.uniforms && shader.material.uniforms.iTime) {
+            shader.material.uniforms.iTime.value = time * 0.001;
+        }
         if (shader.material.uniforms && shader.material.uniforms.time) {
             shader.material.uniforms.time.value = time * 0.001;
         }
