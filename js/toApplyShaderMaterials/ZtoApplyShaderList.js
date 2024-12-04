@@ -1,6 +1,6 @@
-import { GraySinScalerMaterial } from './graySinScaler.js';
-import { ScreamerMaterial } from './screamer.js';
-import { TheWanderer } from './theWanderer.js';
+import GraySinScalerMaterial from './graySinScaler.js';
+import ScreamerMaterial from './screamer.js';
+import TheWanderer from './theWanderer.js';
 
 
 export const shaders = [

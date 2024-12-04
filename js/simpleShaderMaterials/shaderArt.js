@@ -1,4 +1,4 @@
-export const ShaderArtMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         time: { value: 0.0 },
         iResolution: { value: new THREE.Vector3() }

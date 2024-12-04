@@ -1,6 +1,6 @@
 // Made by Chat GPT
 
-export const GradientShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   vertexShader: `
       varying vec2 vUv;
       void main() {

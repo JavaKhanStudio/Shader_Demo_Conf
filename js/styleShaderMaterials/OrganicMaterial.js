@@ -1,4 +1,4 @@
-export const OrganicMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
       time: { value: 0.0 },
       resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }

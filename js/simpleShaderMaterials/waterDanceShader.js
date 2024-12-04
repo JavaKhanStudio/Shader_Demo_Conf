@@ -1,6 +1,6 @@
 // Made by Chat GPT
 
-export const WaterDanceShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         time: { value: 0.0 },
         frequency: { value: 1.0 },

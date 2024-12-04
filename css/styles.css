@@ -338,6 +338,22 @@ button:hover {
     background-image: url('../images/cards/footer.webp');
 }
 
+.fullscreen-btn {
+    background: url('../images/expand.png') no-repeat center center;
+    background-size: auto 100%;
+    width: 3em;
+    height: 3em;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.fullscreen-btn:hover {
+    background-color: rgba(1, 1, 1, 0.2);
+    border: none;
+}
+
 
 @media (width < 600px) {
     h1 {

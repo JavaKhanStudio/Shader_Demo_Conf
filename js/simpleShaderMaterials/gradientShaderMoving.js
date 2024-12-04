@@ -1,6 +1,6 @@
 // Made by Chat GPT
 
-export const GradientShaderMovingMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
   },

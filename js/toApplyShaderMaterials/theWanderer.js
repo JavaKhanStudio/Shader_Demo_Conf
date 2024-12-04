@@ -1,4 +1,4 @@
-export const TheWanderer = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         uTexture_1: { value: null }, // First texture
         uTexture_2: { value: null }, // Second texture

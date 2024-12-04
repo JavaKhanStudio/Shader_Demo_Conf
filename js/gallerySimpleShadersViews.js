@@ -9,6 +9,9 @@ let currentPage = 0;
 let activeShaderViews = [];
 let shaders = [];
 
+let panelWidth = 0;
+let panelHeight = 0;
+
 export async function loadShaders(shaderCategory) {
     try {
         if (shaderCategory === 'simple') {
@@ -47,6 +50,10 @@ function renderShaders(page) {
     }
 }
 
+
+let holdingAspect;
+let holdingInnerWidth;
+let holdingInnerHeight;
 function createShaderView(shader) {
     const canvasWrapper = document.createElement('div');
     canvasWrapper.classList.add('shader-item');
@@ -69,7 +76,12 @@ function createShaderView(shader) {
         buttonContainer.appendChild(button);
     });
 
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.classList.add('fullscreen-btn');
+    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvasWrapper, camera, renderer));
+
     canvasWrapper.appendChild(canvas);
+    title.appendChild(fullscreenButton);
     canvasWrapper.appendChild(title);
     canvasWrapper.appendChild(applyIt);
     canvasWrapper.appendChild(buttonContainer);
@@ -77,11 +89,26 @@ function createShaderView(shader) {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas });
+    let renderer;
+    if (shader.translucide) {
+        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, premultipliedAlpha: false });
+        renderer.setClearColor(0x000000, 0);
+        shader.material.blending = THREE.NormalBlending;
+        camera.near = 0.1;
+        camera.far = 1000;
+        camera.updateProjectionMatrix();
+    } else {
+        renderer = new THREE.WebGLRenderer({ canvas });
+    }
+
+
+
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    holdingInnerWidth = canvas.clientWidth;
+    holdingInnerHeight = canvas.clientHeight;
     camera.position.z = 4;
 
-    const geometry = new THREE.PlaneGeometry(9, 5);
+    const geometry = new THREE.PlaneGeometry(12, 8);
     const plane = new THREE.Mesh(geometry, shader.material);
     scene.add(plane);
 
@@ -116,6 +143,30 @@ function createShaderView(shader) {
 
     window.addEventListener('resize', resizeHandler);
 
+
+    function toggleFullscreen(canvasWrapper, camera, renderer) {
+        if (!document.fullscreenElement) {
+            canvasWrapper.requestFullscreen().then(() => {
+                holdingAspect = camera.aspect;
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                resizeHandler();
+            }).catch((err) => {
+                console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                console.log('exit fullscreen ' + holdingInnerWidth + " " + holdingInnerHeight);
+                renderer.setSize(holdingInnerWidth, holdingInnerHeight);
+                camera.aspect = holdingAspect;
+                camera.updateProjectionMatrix();
+                resizeHandler();
+            }).catch((err) => {
+                console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        }
+    }
     function dispose() {
         disposed = true;
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -137,8 +188,11 @@ function createShaderView(shader) {
         }
     }
 
+
     return { dispose };
 }
+
+
 
 function createPaginationControls() {
     const paginationContainerTop = document.createElement('div');

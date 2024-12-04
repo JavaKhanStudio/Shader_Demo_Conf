@@ -1,5 +1,5 @@
 // Made by Claude
-export const WavePatternShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
     amplitude: { value: 0.2 },

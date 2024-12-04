@@ -1,5 +1,5 @@
-import { TunnelMaterial } from './tunnel.js';
-import { TunnelMaterialV2 } from './tunnelV2.js';
+import TunnelMaterial from './tunnel.js';
+import TunnelMaterialV2 from './tunnelV2.js';
 
 export const shaders = [
     {

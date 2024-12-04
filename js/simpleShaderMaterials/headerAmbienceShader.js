@@ -1,6 +1,6 @@
 // Made by Claude
 
-export const HeaderAmbienceShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
     resolution: { value: new THREE.Vector2() },

@@ -1,12 +1,12 @@
-import { AbstractGenerativeMaterial } from './AbstractGenerative.js';
-import { RetroPixelMaterial } from './RetroPixelMaterial.js';
-import { PBRMaterial } from './PBRMaterial.js';
-import { OrganicMaterial } from './OrganicMaterial.js';
-import { CyberpunkMaterial } from './CyberpunkMaterial.js';
-import { MinimalistGeometricMaterial } from './MinimalistGeometricMaterial.js';
-import { SurrealDreamlikeMaterial } from './SurrealDreamlikeMaterial.js';
-import { PsychedelicOpticalMaterial } from './PsychedelicOpticalMaterial.js';
-import { GlitchDatamoshMaterial } from './GlitchDatamoshMaterial.js';
+import AbstractGenerativeMaterial from './AbstractGenerative.js';
+import RetroPixelMaterial from './RetroPixelMaterial.js';
+import PBRMaterial from './PBRMaterial.js';
+import OrganicMaterial from './OrganicMaterial.js';
+import CyberpunkMaterial from './CyberpunkMaterial.js';
+import MinimalistGeometricMaterial from './MinimalistGeometricMaterial.js';
+import SurrealDreamlikeMaterial from './SurrealDreamlikeMaterial.js';
+import PsychedelicOpticalMaterial from './PsychedelicOpticalMaterial.js';
+import GlitchDatamoshMaterial from './GlitchDatamoshMaterial.js';
 
 export const shaders = [
     {

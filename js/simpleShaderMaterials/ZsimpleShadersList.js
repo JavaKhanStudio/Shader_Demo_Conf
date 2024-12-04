@@ -1,18 +1,15 @@
-import { GradientShaderMaterial } from './gradientShader.js';
-import { GradientShaderMovingMaterial } from './gradientShaderMoving.js';
-import { WavePatternShaderMaterial } from './wavePatternShader.js';
-import { CloudNoiseShaderMaterial } from './cloudNoiseShader.js';
-import { GoldenSpiralShaderMaterial } from './goldenSpiralShader.js';
-import { WaterDanceShaderMaterial } from './waterDanceShader.js';
-import { HeaderAmbienceShaderMaterial } from './headerAmbienceShader.js';
-import { EnhancedWaterShaderMaterial } from './enhancedWaterShader.js';
-import { ShaderArtMaterial } from './shaderArt.js';
-import { MonsterMaterial } from './monster.js';
-import { TunnelMaterial } from './tunnel.js';
-import { TunnelMaterialV2 } from './tunnelV2.js';
-
-import { PhantomStarMaterial } from './phantomStar.js';
-
+import GradientShaderMaterial  from './gradientShader.js';
+import GradientShaderMovingMaterial from './gradientShaderMoving.js';
+import WavePatternShaderMaterial from './wavePatternShader.js';
+import CloudMaterial from './cloudNoiseShader.js';
+import GoldenSpiralShaderMaterial from './goldenSpiralShader.js';
+import WaterDanceShaderMaterial from './waterDanceShader.js';
+import HeaderAmbienceShaderMaterial from './headerAmbienceShader.js';
+import EnhancedWaterShaderMaterial from './enhancedWaterShader.js';
+import ShaderArtMaterial from './shaderArt.js';
+import MonsterMaterial from './monster.js';
+import QuadSphereMaterial from './quadSphere.js';
+import PhantomStarMaterial from './phantomStar.js';
 
 export const shaders = [
     {
@@ -33,6 +30,14 @@ export const shaders = [
         description: '',
         author: ' kishimisu ',
         ref: "https://www.shadertoy.com/view/mtyGWy"
+    },
+    {
+        name: 'Quad Sphere',
+        material: QuadSphereMaterial,
+        description: 'I love spheres',
+        author: 'gyabo',
+        ref: "https://www.shadertoy.com/view/Xdj3DV",
+        translucide: true
     },
     {
         name: 'Monster',
@@ -66,7 +71,7 @@ export const shaders = [
     },
     {
         name: 'Cloud Noise',
-        material: CloudNoiseShaderMaterial,
+        material: CloudMaterial,
         description: "Ethereal cloud formations using Perlin-like noise at different frequencies (fractal Brownian motion), layered together with varying scales and speeds. The monochromatic palette emerges from layering multiple octaves of noise, creating a natural, soft texture that moves like smoke or clouds",
         author: 'Claude',
     },

@@ -1,4 +1,4 @@
-export const ScreamerMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         uTexture_1: { value: null },
         time: { value: 0.0 },

@@ -1,4 +1,4 @@
-export const AddingTimeMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
     speed: { value: 0.8 }

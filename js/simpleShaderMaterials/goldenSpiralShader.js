@@ -1,6 +1,6 @@
 // Made by Claude
 
-export const GoldenSpiralShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0.0 },
     phi: { value: 1.618033988749895 }

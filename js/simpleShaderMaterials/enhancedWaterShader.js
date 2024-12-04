@@ -1,6 +1,6 @@
 // Made by Claude
 
-export const EnhancedWaterShaderMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         time: { value: 0.0 },
         frequency: { value: 3.0 },

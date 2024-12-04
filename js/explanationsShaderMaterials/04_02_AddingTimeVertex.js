@@ -1,4 +1,4 @@
-export const PerpectiveTimeMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0.0 }
       },

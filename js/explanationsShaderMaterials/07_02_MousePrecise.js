@@ -1,4 +1,4 @@
-export const MousePreciseMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
   uniforms: {
       uTexture: { value: null },
       time: { value: 0.0 },

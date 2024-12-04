@@ -1,4 +1,4 @@
-export const TrigGraphMaterial = new THREE.ShaderMaterial({
+export default new THREE.ShaderMaterial({
     uniforms: {
         time: { value: 0.0 },
         scale: { value: 2.0 * Math.PI } // 2 full oscillations over the x-axis
