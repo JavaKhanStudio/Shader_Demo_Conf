@@ -15,12 +15,17 @@
     --code-background: lightgray ;
 }
 
-/* Global Styles */
 main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    width: 86vw ;
+    padding-left: 4vw;
+    padding-right: 4vw;
     font-family: Arial, sans-serif;
+}
+
+.centered {
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
 }
 
 
