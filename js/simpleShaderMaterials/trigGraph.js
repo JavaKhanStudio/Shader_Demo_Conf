@@ -1,16 +1,17 @@
-export default new THREE.ShaderMaterial({
-    uniforms: {
-        time: { value: 0.0 },
-        scale: { value: 2.0 * Math.PI } // 2 full oscillations over the x-axis
-    },
-    vertexShader: `
+export default {
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            time: {value: 0.0},
+            scale: {value: 2.0 * Math.PI} // 2 full oscillations over the x-axis
+        },
+        vertexShader: `
         varying vec2 vUv;
         void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
-    fragmentShader: `
+        fragmentShader: `
         varying vec2 vUv;
         uniform float scale;
         uniform float time;
@@ -58,4 +59,5 @@ export default new THREE.ShaderMaterial({
             gl_FragColor = vec4(color, 1.0);
         }
     `
-});
+    })
+}

@@ -1,17 +1,19 @@
-// Made by Chat GPT
-
-export default new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 0.0 },
-  },
-  vertexShader: `
+export default {
+  name: 'Gradient Moving',
+  description: '',
+  author: 'Chat GPT',
+  material: new THREE.ShaderMaterial({
+    uniforms: {
+      time: {value: 0.0},
+    },
+    vertexShader: `
     varying vec2 vUv;
     void main() {
       vUv = uv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
   `,
-  fragmentShader: `
+    fragmentShader: `
     uniform float time; // Receive time as a uniform
     varying vec2 vUv;
     void main() {
@@ -19,4 +21,5 @@ export default new THREE.ShaderMaterial({
       gl_FragColor = vec4(color, 1.0);
     }
   `
-});
+  })
+}

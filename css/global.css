@@ -1,0 +1,66 @@
+:root {
+    --primary-red: #BA0101;
+    --shadow-red: #ba01016f;
+    --primary-blue: #0752CF;
+    --h1-blue: #5f86c8;
+    --background-color: aliceblue;
+    --text-color: #333333;
+    --accent-color: #0752CF;
+    --border-color: #E0E0E0;
+    --font-family: 'Arial', sans-serif;
+    --font-size-base: 16px;
+    --line-height: 1.6;
+    --padding: 16px;
+    --margin: 16px;
+    --code-background: lightgray ;
+}
+
+/* Global Styles */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+
+footer {
+    background-color: #1c1c1c34;
+    color: #f0f0f0;
+    padding: 1.5em;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin: 0;
+    padding: 0.5em 0;
+    font-weight: bold;
+}
+
+footer .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+footer .social-links a {
+    color: #E0E0E0;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+footer .social-links a:hover {
+    transform: scale(1.2);
+}
+
+
+footer .social-links i {
+    font-size: 24px;
+    transition: transform 0.3s;
+}
+
+footer .social-links i:hover {
+    transform: scale(1.2);
+}

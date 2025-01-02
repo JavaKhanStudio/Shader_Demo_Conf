@@ -1,21 +1,3 @@
-:root {
-    --primary-red: #BA0101;
-    --shadow-red: #ba01016f;
-    --primary-blue: #0752CF;
-    --h1-blue: #5f86c8;
-    --background-color: aliceblue;
-    --text-color: #333333;
-    --accent-color: #0752CF;
-    --border-color: #E0E0E0;
-    --font-family: 'Arial', sans-serif;
-    --font-size-base: 16px;
-    --line-height: 1.6;
-
-    --padding: 16px;
-    --margin: 16px;
-}
-
-
 nav {
     background-color: #1c1c1c;
 
@@ -106,48 +88,6 @@ nav a:first-child {
 
 nav a:last-child {
     border-right: none;
-}
-
-
-footer {
-    background-color: #1c1c1c34;
-    color: #f0f0f0;
-    padding: 1.5em;
-    text-align: center;
-    font-size: 0.9em;
-}
-
-footer p {
-    margin: 0;
-    padding: 0.5em 0;
-    font-weight: bold;
-}
-
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-}
-
-.social-links a {
-    color: inherit;
-    text-decoration: none;
-    transition: transform 0.3s;
-}
-
-.social-links a:hover {
-    transform: scale(1.2);
-}
-
-
-.social-links i {
-    font-size: 24px;
-    transition: transform 0.3s;
-}
-
-.social-links i:hover {
-    transform: scale(1.2);
 }
 
 a {
@@ -271,10 +211,14 @@ canvas {
     display: block;
 }
 
+canvas:fullscreen {
+    border-radius: 0;
+}
+
 .painter-canvas {
     height: auto;
     aspect-ratio: 1 / 1;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 

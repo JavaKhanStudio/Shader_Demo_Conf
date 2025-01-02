@@ -1,16 +1,21 @@
-export default new THREE.ShaderMaterial({
-    uniforms: {
-        time: { value: 0.0 },
-        iResolution: { value: new THREE.Vector3() }
-    },
-    vertexShader: `
+export default {
+    name: 'Shader Art',
+    description: '',
+    author: ' kishimisu ',
+    ref: "https://www.shadertoy.com/view/mtyGWy",
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            time: {value: 0.0},
+            iResolution: {value: new THREE.Vector3()}
+        },
+        vertexShader: `
         varying vec2 vUv;
         void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
-    fragmentShader: `
+        fragmentShader: `
         uniform float time;
         uniform vec3 iResolution;
         varying vec2 vUv;
@@ -42,4 +47,5 @@ export default new THREE.ShaderMaterial({
             gl_FragColor = vec4(finalColor, 1.0);
         }
     `
-});
+    })
+}

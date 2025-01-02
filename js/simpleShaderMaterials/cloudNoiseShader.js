@@ -1,18 +1,20 @@
-// Made by Claude
-
-export default new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 0.0 },
-    density: { value: 1.5 }
-  },
-  vertexShader: `
+export default {
+  name: 'Cloud Noise',
+  description: "Ethereal cloud formations using Perlin-like noise at different frequencies (fractal Brownian motion), layered together with varying scales and speeds. The monochromatic palette emerges from layering multiple octaves of noise, creating a natural, soft texture that moves like smoke or clouds",
+  author: 'Claude',
+  material: new THREE.ShaderMaterial({
+    uniforms: {
+      time: {value: 0.0},
+      density: {value: 1.5}
+    },
+    vertexShader: `
       varying vec2 vUv;
       void main() {
         vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
-  fragmentShader: `
+    fragmentShader: `
       uniform float time;
       uniform float density;
       varying vec2 vUv;
@@ -48,4 +50,5 @@ export default new THREE.ShaderMaterial({
         gl_FragColor = vec4(color, 1.0);
       }
     `
-});
+  })
+}

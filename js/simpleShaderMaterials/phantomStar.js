@@ -1,16 +1,21 @@
-export default new THREE.ShaderMaterial({
-    uniforms: {
-        time: { value: 0.0 },
-        iResolution: { value: new THREE.Vector3() }
-    },
-    vertexShader: `
+export default {
+    name: 'Phantom Star',
+    description: '',
+    author: ' kasari39',
+    ref: "https://www.shadertoy.com/view/ttKGDt",
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            time: {value: 0.0},
+            iResolution: {value: new THREE.Vector3()}
+        },
+        vertexShader: `
         varying vec2 vUv;
         void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
-    fragmentShader: `
+        fragmentShader: `
         precision highp float;
 
         uniform float time;
@@ -87,5 +92,6 @@ export default new THREE.ShaderMaterial({
             gl_FragColor = vec4(col, 1.0 - t * 0.03);
         }
     `
-});
+    })
+}
 

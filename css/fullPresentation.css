@@ -1,19 +1,23 @@
-/* Global Styles */
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-}
-
 /* Top Section */
 #topSection {
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
+pre {
+    border: 1px solid #1c1c1c;
+    font-size: 1.5rem;
+    background-color: #e8e8e8;
+    overflow: hidden;
+}
+
+h1 {
+    color:#1c1c1c ;
+    font-size: 2rem;
+}
 
 /* TODO finish later */
 #explanationSection {

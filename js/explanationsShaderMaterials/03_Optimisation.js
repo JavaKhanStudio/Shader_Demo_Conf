@@ -1,12 +1,16 @@
-export default new THREE.ShaderMaterial({
-    vertexShader: `
+export default {
+    name: 'Optimisation',
+    explanationFR: '',
+    explanationENG: '',
+    material: new THREE.ShaderMaterial({
+        vertexShader: `
         varying vec2 vUv;
         void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
-      fragmentShader: `
+        fragmentShader: `
       varying vec2 vUv;
       void main() {
         // Determine if vUv is within the desired range
@@ -20,4 +24,5 @@ export default new THREE.ShaderMaterial({
         gl_FragColor = vec4(color, 1.0);
       }
     `
-  });
+    })
+}

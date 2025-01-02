@@ -1,16 +1,21 @@
-export default new THREE.ShaderMaterial({
-    uniforms: {
-        uTexture: { value: null },
-        time: { value: 0.0 }
-    },
-    vertexShader: `
+export default {
+    name: 'Too Much',
+    explanationFR: '',
+    explanationENG: '',
+    baseImage: './images/syn/youngSitting.jpg',
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            uTexture: {value: null},
+            time: {value: 0.0}
+        },
+        vertexShader: `
         varying vec2 vUv;
         void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
-    fragmentShader: `
+        fragmentShader: `
         varying vec2 vUv;
         uniform sampler2D uTexture;
         uniform float time;
@@ -45,5 +50,5 @@ export default new THREE.ShaderMaterial({
           gl_FragColor = color;
         }
       `
-  });
-  
+    })
+}

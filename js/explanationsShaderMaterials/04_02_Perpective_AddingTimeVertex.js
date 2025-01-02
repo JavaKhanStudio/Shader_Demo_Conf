@@ -1,8 +1,12 @@
-export default new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0.0 }
-      },
-      vertexShader: `
+export default {
+    name: 'Perspective',
+    explanationFR: '',
+    explanationENG: '',
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            time: {value: 0.0}
+        },
+        vertexShader: `
           varying vec2 vUv;
           uniform float time;
           
@@ -12,7 +16,7 @@ export default new THREE.ShaderMaterial({
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, animatedW);
           }
       `,
-      fragmentShader: `
+        fragmentShader: `
       varying vec2 vUv;
       void main() {
         // Determine if vUv is within the desired range
@@ -26,4 +30,5 @@ export default new THREE.ShaderMaterial({
         gl_FragColor = vec4(color, 1.0);
       }
     `
-  });
+    })
+}

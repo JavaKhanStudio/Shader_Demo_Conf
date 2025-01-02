@@ -62,6 +62,8 @@ function createShaderView(shader) {
     const title = document.createElement('h2');
     title.textContent = shader.name;
 
+    console.log(shader.material.testValue) ;
+
     const applyIt = document.createElement('h3');
     applyIt.textContent = "Apply it";
 
@@ -78,7 +80,7 @@ function createShaderView(shader) {
 
     const fullscreenButton = document.createElement('button');
     fullscreenButton.classList.add('fullscreen-btn');
-    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvasWrapper, camera, renderer));
+    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvasWrapper, canvas, camera, renderer));
 
     canvasWrapper.appendChild(canvas);
     title.appendChild(fullscreenButton);
@@ -100,8 +102,6 @@ function createShaderView(shader) {
     } else {
         renderer = new THREE.WebGLRenderer({ canvas });
     }
-
-
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     holdingInnerWidth = canvas.clientWidth;
@@ -143,30 +143,6 @@ function createShaderView(shader) {
 
     window.addEventListener('resize', resizeHandler);
 
-
-    function toggleFullscreen(canvasWrapper, camera, renderer) {
-        if (!document.fullscreenElement) {
-            canvasWrapper.requestFullscreen().then(() => {
-                holdingAspect = camera.aspect;
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                resizeHandler();
-            }).catch((err) => {
-                console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen().then(() => {
-                console.log('exit fullscreen ' + holdingInnerWidth + " " + holdingInnerHeight);
-                renderer.setSize(holdingInnerWidth, holdingInnerHeight);
-                camera.aspect = holdingAspect;
-                camera.updateProjectionMatrix();
-                resizeHandler();
-            }).catch((err) => {
-                console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
-            });
-        }
-    }
     function dispose() {
         disposed = true;
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -247,4 +223,80 @@ function createPaginationControls() {
     }
 }
 
+let isFullScreen = false ;
+let fullCanvasWrapper ;
+let fullCanvas ;
+let fullCamera ;
+let fullRenderer
 
+
+function toggleFullscreen(canvasWrapper, canvas, camera, renderer) {
+
+    console.log(isFullScreen) ;
+
+    if (!isFullScreen) {
+        isFullScreen = true;
+
+        // Save the current size of the canvas before fullscreen
+        const originalWidth = renderer.domElement.clientWidth;
+        const originalHeight = renderer.domElement.clientHeight;
+
+        // Store references for later use
+        fullCanvasWrapper = canvasWrapper;
+        fullCanvas = canvas;
+        fullCamera = camera;
+        fullRenderer = renderer;
+
+        canvas.requestFullscreen().then(() => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        }).catch((err) => {
+            console.error(`Error attempting to enter fullscreen mode: ${err.message} (${err.name})`);
+        });
+
+        // Save original dimensions for restoring later
+        canvas.dataset.originalWidth = originalWidth;
+        canvas.dataset.originalHeight = originalHeight;
+
+    } else {
+        isFullScreen = false;
+
+        const originalWidth = parseInt(canvas.dataset.originalWidth, 10);
+        const originalHeight = parseInt(canvas.dataset.originalHeight, 10);
+
+        renderer.setSize(originalWidth, originalHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        camera.aspect = originalWidth / originalHeight;
+        camera.updateProjectionMatrix();
+
+
+        if (document.fullscreenElement) {
+            document.exitFullscreen().then(() => {
+
+            }).catch((err) => {
+                console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            console.log('Not in fullscreen mode, no need to exit.');
+        }
+
+        fullCanvasWrapper = null;
+        fullCanvas = null;
+        fullCamera = null;
+        fullRenderer = null;
+    }
+}
+
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        console.log('Entered fullscreen');
+    } else {
+        console.log('Exited fullscreen');
+
+        if(fullCanvasWrapper) {
+            toggleFullscreen(fullCanvasWrapper, fullCanvas, fullCamera, fullRenderer) ;
+        }
+    }
+});

@@ -1,12 +1,15 @@
-// Made by Claude
-export default new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 0.0 },
-    amplitude: { value: 0.2 },
-    frequency: { value: 5.0 },
-    colorSpeed: { value: 1.0 }
-  },
-  vertexShader: `
+export default {
+  name: 'Wave Pattern',
+  description: '',
+  author: 'Claude',
+  material: new THREE.ShaderMaterial({
+    uniforms: {
+      time: {value: 0.0},
+      amplitude: {value: 0.2},
+      frequency: {value: 5.0},
+      colorSpeed: {value: 1.0}
+    },
+    vertexShader: `
       varying vec2 vUv;
       varying float vElevation;
       uniform float time;
@@ -27,7 +30,7 @@ export default new THREE.ShaderMaterial({
         gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
       }
     `,
-  fragmentShader: `
+    fragmentShader: `
       uniform float time;
       uniform float colorSpeed;
       varying vec2 vUv;
@@ -56,4 +59,5 @@ export default new THREE.ShaderMaterial({
         gl_FragColor = vec4(rgbColor, 1.0);
       }
     `
-});
+  })
+}

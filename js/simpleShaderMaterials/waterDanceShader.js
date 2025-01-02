@@ -1,20 +1,21 @@
-// Made by Chat GPT
-
-export default new THREE.ShaderMaterial({
-    uniforms: {
-        time: { value: 0.0 },
-        frequency: { value: 1.0 },
-        amplitude: { value: 0.5 },
-        speed: { value: 0.5 }
-    },
-    vertexShader: `
+export default {
+    name: 'Water Dance',
+    author: 'Chat GPT',
+    material: new THREE.ShaderMaterial({
+        uniforms: {
+            time: {value: 0.0},
+            frequency: {value: 1.0},
+            amplitude: {value: 0.5},
+            speed: {value: 0.5}
+        },
+        vertexShader: `
         varying vec2 vUv;
         void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
-    fragmentShader: `
+        fragmentShader: `
         uniform float time;
         uniform float frequency;
         uniform float amplitude;
@@ -39,4 +40,6 @@ export default new THREE.ShaderMaterial({
           gl_FragColor = vec4(color, 1.0);
         }
       `
-});  
+    })
+
+}
