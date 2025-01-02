@@ -23,14 +23,9 @@ export default {
           uniform vec2 mousePosition;
     
           void main() {
-            vec4 color = texture2D(uTexture, vUv);
-    
-            float dist = distance(vUv, mousePosition);
-    
-            float dimFactor = smoothstep(0.2, 0.3, dist); 
-            color.rgb *= dimFactor; 
-    
-            gl_FragColor = color;
+            vec4 textureColor = texture2D(uTexture, vUv);
+            float dist = distance(vUv, mousePosition);    
+            gl_FragColor = textureColor - vec4(vec3(dist * 2.2), 0.0);
           }
         `
     })

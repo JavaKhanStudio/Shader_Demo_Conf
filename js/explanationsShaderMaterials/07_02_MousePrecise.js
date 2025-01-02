@@ -24,16 +24,9 @@ export default {
       uniform vec2 mousePosition;
 
       void main() {
-        vec4 color = texture2D(uTexture, vUv);
-
-        // Calculate distance from mouse position to current fragment
-        float dist = distance(vUv, mousePosition);
-
-        // Dimming effect based on distance (adjust strength as needed)
-        float dimFactor = smoothstep(0.2, 0.3, dist); // Adjust the radius here
-        color.rgb *= dimFactor; // Apply dimming
-
-        gl_FragColor = color;
+        vec4 textureColor = texture2D(uTexture, vUv);
+        float dist = distance(vUv, mousePosition);    
+        gl_FragColor = textureColor - vec4(vec3(dist * 2.2), 0.0);
       }
     `
     })
