@@ -12,8 +12,8 @@
     --line-height: 1.6;
     --padding: 16px;
     --margin: 16px;
-    --page-padding:2rem ;
-    --code-background: lightgray ;
+    --page-padding: 2rem;
+    --code-background: lightgray;
 }
 
 main {
@@ -23,8 +23,15 @@ main {
     padding-right: var(--page-padding);
 }
 
+.logo {
+    background: url('../images/LogoHeaderSBP.webp') no-repeat center center;
+    background-size: auto 100%;
+    width: 190px;
+    height: 150px;
+}
+
 .centered {
-    display: flex ;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -70,5 +77,3 @@ footer .social-links i {
 footer .social-links i:hover {
     transform: scale(1.2);
 }
-
-
