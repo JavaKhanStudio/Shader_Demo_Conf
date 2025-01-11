@@ -78,8 +78,8 @@ export default {
         }
     `,
         uniforms: {
-            iTime: {value: 0},
-            iResolution: {value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
+            iTime: { value: 0 },
+            iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         },
     })
 }

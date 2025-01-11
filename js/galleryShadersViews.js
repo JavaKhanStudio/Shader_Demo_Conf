@@ -28,8 +28,7 @@ export async function loadShaders(shaderCategory) {
         }
 
         if (!simpleShaderCard) {
-            simpleShaderCard = await loadHTML("../parts/simpleShaderCard.html");
-            console.log("simpleShaderCard", simpleShaderCard);
+            simpleShaderCard = await loadHTML("./parts/simpleShaderCard.html");
         }
 
         prepareShaders(currentPage);

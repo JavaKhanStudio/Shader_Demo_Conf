@@ -22,20 +22,20 @@
     <div id="header-placeholder"></div>
     <main>
         <script type="module">
-            import {loadShaders} from "./js/galleryShadersViews.js" ;
-            loadShaders("AI") ;
+            import { loadShaders } from "./js/galleryShadersViews.js";
+            loadShaders("AI");
         </script>
         <script type="module">
             import { injectShaderToElement } from './js/shaderInjector.js';
             import { shaders } from './js/aiMadeShaderMaterials/ZShadersList.js';
-            
+
             loadAllSections.then(() => {
                 injectShaderToElement(shaders[1], 'header');
             }).catch(error => console.error("Error loading sections:", error));
         </script>
     </main>
     <div id="footer-placeholder"></div>
-    
+
 </body>
 
 </html>

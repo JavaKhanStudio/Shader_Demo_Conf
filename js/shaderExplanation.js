@@ -22,7 +22,7 @@ export async function loadExplanations(explanationToLoad) {
 
         await generateHTML();
         addInteractions();
-        managedPagination() ;
+        managedPagination();
         await loadShader(currentIndex);
 
         if (asSounds) {
@@ -107,15 +107,15 @@ async function renderShader(shader) {
     material = shader.material
     canvasContainer = document.getElementById("presentingShader");
 
-    if(canvas) {
-        canvas.remove() ;
+    if (canvas) {
+        canvas.remove();
     }
 
     const scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-    canvas = renderer.domElement ;
+    canvas = renderer.domElement;
     canvasContainer.appendChild(canvas);
 
     geometry = new THREE.PlaneGeometry(9, 6);
@@ -203,7 +203,7 @@ async function loadShader(index) {
 
 let titleElement;
 let explanationElement;
-let presentingShaderSection ;
+let presentingShaderSection;
 let fragmentCodeElement;
 let vertexCodeElement;
 let jsCodeElement;
@@ -211,7 +211,7 @@ let previousButton;
 let nextButton;
 
 async function generateHTML() {
-    await loadHTML("../parts/fullPresentation.html","main-placeholder") ;
+    await loadHTML("./parts/fullPresentation.html", "main-placeholder");
     titleElement = document.getElementById("currentTitle");
     explanationElement = document.getElementById("explanation");
     presentingShaderSection = document.getElementById("presentingShader");
@@ -224,7 +224,7 @@ async function generateHTML() {
     const fullscreenButton = document.createElement('button');
     fullscreenButton.classList.add('fullscreen-option');
     fullscreenButton.addEventListener('click', () => toggleFullscreen());
-    presentingShaderSection.appendChild(fullscreenButton) ;
+    presentingShaderSection.appendChild(fullscreenButton);
 }
 
 async function loadHTML(filePath, targetElementId) {
@@ -246,7 +246,7 @@ async function loadHTML(filePath, targetElementId) {
     }
 }
 
-let isFullScreen = false ;
+let isFullScreen = false;
 
 function toggleFullscreen() {
 
@@ -296,8 +296,8 @@ function toggleFullscreen() {
 document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {
     } else {
-        if(canvasContainer) {
-            toggleFullscreen() ;
+        if (canvasContainer) {
+            toggleFullscreen();
         }
     }
 });
