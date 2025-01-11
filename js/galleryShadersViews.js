@@ -1,4 +1,4 @@
-import { injectShaderToElement } from './shaderInjector.js';
+import {injectShaderToElement} from './shaderInjector.js';
 
 const gridContainer = document.createElement('div');
 gridContainer.classList.add('shader-grid');
@@ -12,6 +12,8 @@ let shaders = [];
 let panelWidth = 0;
 let panelHeight = 0;
 
+let simpleShaderCard ;
+
 export async function loadShaders(shaderCategory) {
     try {
         if (shaderCategory === 'simple') {
@@ -21,6 +23,10 @@ export async function loadShaders(shaderCategory) {
             const module = await import('./styleShaderMaterials/ZStyleShaderList.js');
             shaders = module.shaders;
         }
+        if(!simpleShaderCard) {
+            simpleShaderCard = await loadHTML("../parts/simpleShaderCard.html") ;
+        }
+
         prepareShaders(currentPage);
     } catch (error) {
         console.error('Failed to load shaders:', error);
@@ -50,24 +56,24 @@ function renderShaders(page) {
     }
 }
 
-
-let holdingAspect;
 let holdingInnerWidth;
 let holdingInnerHeight;
-function createShaderView(shader) {
-    const canvasWrapper = document.createElement('div');
-    canvasWrapper.classList.add('shader-item');
 
-    const canvas = document.createElement('canvas');
-    const title = document.createElement('h2');
+function createShaderView(shader) {
+
+
+    let newCard = simpleShaderCard.cloneNode(true) ;
+    const canvasWrapper = newCard.getElementsByClassName("shader-item")[0] ;
+
+    const canvas = newCard.getElementsByTagName('canvas')[0] ;
+    const title = newCard.getElementsByClassName("shader-name")[0] ;
     title.textContent = shader.name;
 
-    console.log(shader.material.testValue) ;
-
-    const applyIt = document.createElement('h3');
+    const applyIt = newCard.getElementsByClassName("apply-text")[0] ;
     applyIt.textContent = "Apply it";
 
-    const buttonContainer = document.createElement('div');
+    // Building And Adding the buttons for greater simplicity
+    const buttonContainer = newCard.getElementsByClassName("button-container")[0] ;
     ['header', 'main', 'footer'].forEach(area => {
         const button = document.createElement('button');
         button.classList.add(`${area}-icon`);
@@ -78,16 +84,10 @@ function createShaderView(shader) {
         buttonContainer.appendChild(button);
     });
 
-    const fullscreenButton = document.createElement('button');
-    fullscreenButton.classList.add('fullscreen-btn');
-    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvasWrapper, canvas, camera, renderer));
+    const fullscreenButton = newCard.getElementsByClassName("shader-title")[0].getElementsByClassName('fullscreen-btn')[0];
+    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvas, camera, renderer));
 
-    canvasWrapper.appendChild(canvas);
-    title.appendChild(fullscreenButton);
-    canvasWrapper.appendChild(title);
-    canvasWrapper.appendChild(applyIt);
-    canvasWrapper.appendChild(buttonContainer);
-    gridContainer.appendChild(canvasWrapper);
+    gridContainer.appendChild(newCard);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
@@ -133,11 +133,20 @@ function createShaderView(shader) {
         animationFrameId = requestAnimationFrame(animate);
     }
     animate();
-
+    resizeHandler();
     function resizeHandler() {
         if (disposed) return;
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+
+        if(fullRenderer === renderer) {
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        } else {
+            renderer.setSize(newCard.clientWidth, newCard.clientHeight / 2);
+            camera.aspect = newCard.clientWidth / (newCard.clientHeight / 2);
+        }
+
+
+
         camera.updateProjectionMatrix();
     }
 
@@ -164,13 +173,13 @@ function createShaderView(shader) {
         }
     }
 
-
     return { dispose };
 }
 
 
 
 function createPaginationControls() {
+
     const paginationContainerTop = document.createElement('div');
     paginationContainerTop.classList.add('pagination-controls');
 
@@ -224,15 +233,13 @@ function createPaginationControls() {
 }
 
 let isFullScreen = false ;
-let fullCanvasWrapper ;
 let fullCanvas ;
 let fullCamera ;
 let fullRenderer
 
 
-function toggleFullscreen(canvasWrapper, canvas, camera, renderer) {
+function toggleFullscreen(canvas, camera, renderer) {
 
-    console.log(isFullScreen) ;
 
     if (!isFullScreen) {
         isFullScreen = true;
@@ -241,11 +248,11 @@ function toggleFullscreen(canvasWrapper, canvas, camera, renderer) {
         const originalWidth = renderer.domElement.clientWidth;
         const originalHeight = renderer.domElement.clientHeight;
 
-        // Store references for later use
-        fullCanvasWrapper = canvasWrapper;
         fullCanvas = canvas;
         fullCamera = camera;
         fullRenderer = renderer;
+
+        console.log(renderer) ;
 
         canvas.requestFullscreen().then(() => {
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -256,7 +263,6 @@ function toggleFullscreen(canvasWrapper, canvas, camera, renderer) {
             console.error(`Error attempting to enter fullscreen mode: ${err.message} (${err.name})`);
         });
 
-        // Save original dimensions for restoring later
         canvas.dataset.originalWidth = originalWidth;
         canvas.dataset.originalHeight = originalHeight;
 
@@ -274,29 +280,42 @@ function toggleFullscreen(canvasWrapper, canvas, camera, renderer) {
 
         if (document.fullscreenElement) {
             document.exitFullscreen().then(() => {
-
+                window.dispatchEvent(new Event('resize'));
             }).catch((err) => {
                 console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
             });
         } else {
-            console.log('Not in fullscreen mode, no need to exit.');
+
         }
 
-        fullCanvasWrapper = null;
-        fullCanvas = null;
-        fullCamera = null;
-        fullRenderer = null;
+    }
+}
+
+async function loadHTML(filePath) {
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+            throw new Error(`Failed to load ${filePath}: ${response.statusText}`);
+        }
+
+        let htmlString = await response.text() ;
+        const template = document.createElement('template');
+        template.innerHTML = htmlString.trim();
+        return template.content.firstElementChild;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
 }
 
 document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {
-        console.log('Entered fullscreen');
     } else {
-        console.log('Exited fullscreen');
-
-        if(fullCanvasWrapper) {
-            toggleFullscreen(fullCanvasWrapper, fullCanvas, fullCamera, fullRenderer) ;
+        if(fullCanvas) {
+            toggleFullscreen(fullCanvas, fullCamera, fullRenderer) ;
+            fullCanvas = null;
+            fullCamera = null;
+            fullRenderer = null;
         }
     }
 });
