@@ -1,4 +1,4 @@
-import {injectShaderToElement} from './shaderInjector.js';
+import { injectShaderToElement } from './shaderInjector.js';
 
 const gridContainer = document.createElement('div');
 gridContainer.classList.add('shader-grid');
@@ -12,19 +12,24 @@ let shaders = [];
 let panelWidth = 0;
 let panelHeight = 0;
 
-let simpleShaderCard ;
+let simpleShaderCard;
 
 export async function loadShaders(shaderCategory) {
     try {
-        if (shaderCategory === 'simple') {
-            const module = await import('./simpleShaderMaterials/ZsimpleShadersList.js');
+        if (shaderCategory === 'extern') {
+            const module = await import('./externShaderMaterials/ZShadersList.js');
+            shaders = module.shaders;
+        } else if (shaderCategory === 'AI') {
+            const module = await import('./aiMadeShaderMaterials/ZShadersList.js');
             shaders = module.shaders;
         } else if (shaderCategory === 'style') {
-            const module = await import('./styleShaderMaterials/ZStyleShaderList.js');
+            const module = await import('./styleShaderMaterials/ZShaderList.js');
             shaders = module.shaders;
         }
-        if(!simpleShaderCard) {
-            simpleShaderCard = await loadHTML("../parts/simpleShaderCard.html") ;
+
+        if (!simpleShaderCard) {
+            simpleShaderCard = await loadHTML("../parts/simpleShaderCard.html");
+            console.log("simpleShaderCard", simpleShaderCard);
         }
 
         prepareShaders(currentPage);
@@ -62,18 +67,19 @@ let holdingInnerHeight;
 function createShaderView(shader) {
 
 
-    let newCard = simpleShaderCard.cloneNode(true) ;
-    const canvasWrapper = newCard.getElementsByClassName("shader-item")[0] ;
+    let newCard = simpleShaderCard.cloneNode(true);
+    console.log("shader", shader, "newCard", newCard);
+    const canvasWrapper = newCard.getElementsByClassName("shader-item")[0];
 
-    const canvas = newCard.getElementsByTagName('canvas')[0] ;
-    const title = newCard.getElementsByClassName("shader-name")[0] ;
+    const canvas = newCard.getElementsByTagName('canvas')[0];
+    const title = newCard.getElementsByClassName("shader-name")[0];
     title.textContent = shader.name;
 
-    const applyIt = newCard.getElementsByClassName("apply-text")[0] ;
+    const applyIt = newCard.getElementsByClassName("apply-text")[0];
     applyIt.textContent = "Apply it";
 
     // Building And Adding the buttons for greater simplicity
-    const buttonContainer = newCard.getElementsByClassName("button-container")[0] ;
+    const buttonContainer = newCard.getElementsByClassName("button-container")[0];
     ['header', 'main', 'footer'].forEach(area => {
         const button = document.createElement('button');
         button.classList.add(`${area}-icon`);
@@ -137,7 +143,7 @@ function createShaderView(shader) {
     function resizeHandler() {
         if (disposed) return;
 
-        if(fullRenderer === renderer) {
+        if (fullRenderer === renderer) {
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
         } else {
@@ -232,9 +238,9 @@ function createPaginationControls() {
     }
 }
 
-let isFullScreen = false ;
-let fullCanvas ;
-let fullCamera ;
+let isFullScreen = false;
+let fullCanvas;
+let fullCamera;
 let fullRenderer
 
 
@@ -252,7 +258,7 @@ function toggleFullscreen(canvas, camera, renderer) {
         fullCamera = camera;
         fullRenderer = renderer;
 
-        console.log(renderer) ;
+        console.log(renderer);
 
         canvas.requestFullscreen().then(() => {
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -298,7 +304,7 @@ async function loadHTML(filePath) {
             throw new Error(`Failed to load ${filePath}: ${response.statusText}`);
         }
 
-        let htmlString = await response.text() ;
+        let htmlString = await response.text();
         const template = document.createElement('template');
         template.innerHTML = htmlString.trim();
         return template.content.firstElementChild;
@@ -311,8 +317,8 @@ async function loadHTML(filePath) {
 document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {
     } else {
-        if(fullCanvas) {
-            toggleFullscreen(fullCanvas, fullCamera, fullRenderer) ;
+        if (fullCanvas) {
+            toggleFullscreen(fullCanvas, fullCamera, fullRenderer);
             fullCanvas = null;
             fullCamera = null;
             fullRenderer = null;

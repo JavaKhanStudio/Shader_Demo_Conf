@@ -1,11 +1,11 @@
-import GradientShaderMaterial from "./gradientShader";
-import GradientShaderMovingMaterial from "./gradientShaderMoving";
-import WavePatternShaderMaterial from "./wavePatternShader";
-import CloudMaterial from "./cloudNoiseShader";
-import GoldenSpiralShaderMaterial from "./goldenSpiralShader";
-import WaterDanceShaderMaterial from "./waterDanceShader";
-import HeaderAmbienceShaderMaterial from "./headerAmbienceShader";
-import EnhancedWaterShaderMaterial from "./enhancedWaterShader";
+import GradientShaderMaterial from "./gradientShader.js";
+import GradientShaderMovingMaterial from "./gradientShaderMoving.js";
+import WavePatternShaderMaterial from "./wavePatternShader.js";
+import CloudMaterial from "./cloudNoiseShader.js";
+import GoldenSpiralShaderMaterial from "./goldenSpiralShader.js";
+import WaterDanceShaderMaterial from "./waterDanceShader.js";
+import HeaderAmbienceShaderMaterial from "./headerAmbienceShader.js";
+import EnhancedWaterShaderMaterial from "./enhancedWaterShader.js";
 
 export const shaders = [
     GradientShaderMaterial,

@@ -128,7 +128,7 @@ h3 {
 
 main,
 footer {
-    position: relative;
+
 }
 
 #header-canvas,
@@ -147,7 +147,7 @@ footer {
 
 .shader-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding: 50px;
 }
@@ -172,43 +172,6 @@ header h1 {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-}
-
-.shader-item {
-    background-color: #ffffff;
-    box-shadow: 4px -2px 7px 6px rgba(1, 1, 1, 0.6);
-    padding: 5px;
-    border-radius: 20px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: all 0.4s ease;
-    border: rgba(1, 1, 1, 0.0) 3px dashed;
-    text-align: center;
-    font-size: 1.2em;
-    align-items: center;
-    flex-grow: 0;
-    flex-shrink: 1;
-    max-height: 100vh;
-}
-
-.shader-item h2 {
-    height: 20%;
-}
-
-.shader-item:hover {
-    box-shadow: 4px 2px 6px 6px var(--shadow-red);
-    border: var(--primary-blue) 3px dashed;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-canvas {
-    width: 99%;
-    border-radius: 10px;
-    height: 99%;
-    display: block;
 }
 
 canvas:fullscreen {
@@ -299,6 +262,12 @@ button:hover {
 }
 
 
+@media (width < 1400px) {
+    .shader-grid{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 @media (width < 600px) {
     h1 {
         font-size: 55px !important;
@@ -306,7 +275,10 @@ button:hover {
 
     .painter-shader-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
+    }
 
+    .shader-grid{
+        grid-template-columns: 1fr;
     }
 
 }

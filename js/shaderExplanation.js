@@ -106,15 +106,17 @@ async function renderShader(shader) {
     currentShader = shader;
     material = shader.material
     canvasContainer = document.getElementById("presentingShader");
-    canvasContainer.innerHTML = ''; // Clear any existing renderer
 
-    canvas = document.querySelector("canvas");
+    if(canvas) {
+        canvas.remove() ;
+    }
 
     const scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-    canvasContainer.appendChild(renderer.domElement);
+    canvas = renderer.domElement ;
+    canvasContainer.appendChild(canvas);
 
     geometry = new THREE.PlaneGeometry(9, 6);
 
@@ -201,6 +203,7 @@ async function loadShader(index) {
 
 let titleElement;
 let explanationElement;
+let presentingShaderSection ;
 let fragmentCodeElement;
 let vertexCodeElement;
 let jsCodeElement;
@@ -211,12 +214,17 @@ async function generateHTML() {
     await loadHTML("../parts/fullPresentation.html","main-placeholder") ;
     titleElement = document.getElementById("currentTitle");
     explanationElement = document.getElementById("explanation");
+    presentingShaderSection = document.getElementById("presentingShader");
     fragmentCodeElement = document.getElementById("fragmentCode");
     vertexCodeElement = document.getElementById("vertexCode");
     jsCodeElement = document.getElementById("jsCode");
     previousButton = document.getElementById("previousButton");
     nextButton = document.getElementById("nextButton");
 
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.classList.add('fullscreen-option');
+    fullscreenButton.addEventListener('click', () => toggleFullscreen());
+    presentingShaderSection.appendChild(fullscreenButton) ;
 }
 
 async function loadHTML(filePath, targetElementId) {
@@ -237,3 +245,59 @@ async function loadHTML(filePath, targetElementId) {
         throw error;
     }
 }
+
+let isFullScreen = false ;
+
+function toggleFullscreen() {
+
+    if (!isFullScreen) {
+        isFullScreen = true;
+
+        // Save the current size of the canvas before fullscreen
+        const originalWidth = renderer.domElement.clientWidth;
+        const originalHeight = renderer.domElement.clientHeight;
+
+        canvas.requestFullscreen().then(() => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        }).catch((err) => {
+            console.error(`Error attempting to enter fullscreen mode: ${err.message} (${err.name})`);
+        });
+
+        // Save original dimensions for restoring later
+        canvas.dataset.originalWidth = originalWidth;
+        canvas.dataset.originalHeight = originalHeight;
+
+    } else {
+        isFullScreen = false;
+
+        const originalWidth = parseInt(canvas.dataset.originalWidth, 10);
+        const originalHeight = parseInt(canvas.dataset.originalHeight, 10);
+
+        renderer.setSize(originalWidth, originalHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        camera.aspect = originalWidth / originalHeight;
+        camera.updateProjectionMatrix();
+
+        if (document.fullscreenElement) {
+            document.exitFullscreen().then(() => {
+
+            }).catch((err) => {
+                console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            console.log('Not in fullscreen mode, no need to exit.');
+        }
+    }
+}
+
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+    } else {
+        if(canvasContainer) {
+            toggleFullscreen() ;
+        }
+    }
+});

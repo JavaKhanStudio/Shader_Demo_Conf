@@ -1,4 +1,4 @@
-import { shaders } from './simpleShaderMaterials/ZsimpleShadersList.js';
+import { shaders } from './externShaderMaterials/ZShadersList.js';
 
 const elementMap = {}; // Store unique configurations for each element selector
 
@@ -11,7 +11,6 @@ export function injectShaderToElement(shader, elementSelector) {
         return;
     }
 
-    console.log(elementSelector.style);
     targetElement.style.setProperty("background-color", "");
 
     if (!elementMap[elementSelector]) {
@@ -28,9 +27,9 @@ export function injectShaderToElement(shader, elementSelector) {
         targetElement.appendChild(canvas);
 
         const renderer = new THREE.WebGLRenderer({ canvas });
-        renderer.setSize(window.innerWidth, targetElement.clientHeight);
+        renderer.setSize(targetElement.clientWidth, targetElement.clientHeight);
         elementMap[elementSelector].renderer = renderer;
-
+        console.log(renderer, canvas) ;
         camera.position.z = 1;
 
         window.addEventListener('resize', () => resize(elementSelector));
@@ -61,12 +60,13 @@ export function injectShaderToElement(shader, elementSelector) {
         const targetElement = document.querySelector(selector);
         const targetHeight = targetElement.clientHeight;
 
-        renderer.setSize(window.innerWidth, targetHeight);
+        renderer.setSize(targetElement.clientWidth, targetHeight);
         camera.aspect = window.innerWidth / targetHeight;
         camera.updateProjectionMatrix();
 
         const newHeight = 2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.z * 4;
         const newWidth = newHeight * camera.aspect * 0.333;
+
         currentPlane.geometry.dispose();
         currentPlane.geometry = new THREE.PlaneGeometry(newWidth, newHeight);
     }

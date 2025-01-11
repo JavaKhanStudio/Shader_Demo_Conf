@@ -24,6 +24,20 @@ h1 {
     display: none;
 }
 
+.fullscreen-option{
+    position: absolute;
+    right:10% ;
+    margin-top: 2%;
+    background: url('../images/expandWhite.png') no-repeat center center;
+    background-size: auto 100%;
+    width: 3em;
+    height: 3em;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
 #topSection button {
     padding: 10px 20px;
     font-size: 16px;
@@ -71,6 +85,15 @@ pre code {
     max-height: 400px;
     max-width: 90vw;
     box-sizing: border-box;
+}
+
+canvas:fullscreen {
+    visibility:visible;
+}
+
+body:has(canvas:fullscreen) {
+    background-color: black;
+    visibility: hidden;
 }
 
 

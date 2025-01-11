@@ -12,14 +12,15 @@
     --line-height: 1.6;
     --padding: 16px;
     --margin: 16px;
+    --page-padding:2rem ;
     --code-background: lightgray ;
 }
 
 main {
-    width: 86vw ;
-    padding-left: 4vw;
-    padding-right: 4vw;
     font-family: Arial, sans-serif;
+    width: calc(100% - var(--page-padding) * 2);
+    padding-left: var(--page-padding);
+    padding-right: var(--page-padding);
 }
 
 .centered {
@@ -69,3 +70,5 @@ footer .social-links i {
 footer .social-links i:hover {
     transform: scale(1.2);
 }
+
+
