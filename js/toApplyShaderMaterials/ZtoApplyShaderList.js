@@ -1,5 +1,6 @@
 import GraySinScalerMaterial from './graySinScaler.js';
 import ScreamerMaterial from './screamer.js';
+import ThePuppyMaterial from './thePuppy.js';
 import TheWanderer from './theWanderer.js';
 
 
@@ -10,6 +11,14 @@ export const shaders = [
         description: 'Simple Gray scale applyed on image',
         baseImage: './images/toApplyShaderBase/elepantByAI.jpg',
         author: 'Chat GPT',
+    },
+    {
+        name: 'The Puppy',
+        material: ThePuppyMaterial,
+        description: 'Classic Screamer with some screamy effects',
+        baseImage: './images/bebe/1_bebe.jpg',
+        optionalImage2:'./images/bebe/1_bebe_central.jpg',
+        optionalImage3:'./images/bebe/1_bebe_around.jpg',
     },
     {
         name: 'The Scream',
