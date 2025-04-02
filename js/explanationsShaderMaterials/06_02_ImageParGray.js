@@ -1,5 +1,5 @@
 export default {
-    name: 'Image Gray',
+    name: 'Image Partly Gray',
     explanationFR: '',
     explanationENG: '',
     baseImage: './images/syn/youngSitting.jpg',
@@ -24,9 +24,12 @@ export default {
       
         vec4 color = texture2D(uTexture, vUv);
 
-        float grayscale = (color.r + color.g + color.b) / 3.0;
-        color = vec4(vec3(grayscale), color.a);
-        
+        float blueIntensity = color.b - color.r;
+        if (blueIntensity > 0.3) { 
+          float grayscale = (color.r + color.g + color.b) / 3.0;
+          color = vec4(vec3(grayscale), color.a);
+        } 
+
         gl_FragColor = color;
       }
     `
