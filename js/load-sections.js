@@ -4,7 +4,7 @@ function loadSection(id, url) {
       .then(data => {
         document.getElementById(id).innerHTML = data;
       })
-      .catch(error => console.error('Error loading section:', error));
+      .catch(error => console.error('Error loading section: ' + url + " ID : " + id, error));
 }
   
 window.loadAllSections = new Promise((resolve, reject) => {

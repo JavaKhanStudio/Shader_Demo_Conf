@@ -78,6 +78,13 @@ function addInteractions() {
 }
 
 function managedPagination() {
+
+    if(!previousButton || nextButton) {
+        console.log("No button for pagination") ;
+        return ;
+    }
+
+
     previousButton.addEventListener("click", () => {
         if (currentIndex > 0) {
             currentIndex--;
@@ -164,6 +171,15 @@ async function renderShader(shader) {
 }
 
 function setInformations(shader) {
+
+    // TODO repair this
+    return ;
+
+    if(!titleSection) {
+        console.log("no title section found") ;
+        return ;
+    }
+
     titleSection.textContent = shader.name;
 
     if (currentLang === 'ENG') {
