@@ -15,6 +15,8 @@ let panelHeight = 0;
 let simpleShaderCard;
 
 export async function loadShaders(shaderCategory) {
+
+    console.log("loading shader : " + shaderCategory);
     try {
         if (shaderCategory === 'extern') {
             const module = await import('./externShaderMaterials/ZShadersList.js');
@@ -26,6 +28,7 @@ export async function loadShaders(shaderCategory) {
             const module = await import('./styleShaderMaterials/ZShaderList.js');
             shaders = module.shaders;
         }
+
 
         if (!simpleShaderCard) {
             simpleShaderCard = await loadHTML("./parts/simpleShaderCard.html");

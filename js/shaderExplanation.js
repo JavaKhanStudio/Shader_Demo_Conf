@@ -2,6 +2,7 @@ let shaders = [];
 let currentLang;
 let currentIndex = 0;
 let asSounds = false;
+let displayInfos = true ;
 export async function loadExplanations(explanationToLoad) {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -18,10 +19,22 @@ export async function loadExplanations(explanationToLoad) {
             const module = await import('./explanationsSoundsShadersMaterials/soundsExplanationList.js');
             shaders = module.shaders;
             asSounds = true;
+        } else if(explanationToLoad === 'builder') {
+            let shaderBuilder = (await import('./EmptyDefault.js')).default ;
+
+            console.log(shaderBuilder) ;
+            console.log(shaderBuilder.material) ;
+            shaders = [shaderBuilder] ;
+            displayInfos = false ;
         }
 
-        await generateHTML();
+        if(displayInfos)
+            await generateHTML();
+        else
+            await generateHTML();
+
         addInteractions();
+
         managedPagination();
         await loadShader(currentIndex);
 
@@ -79,12 +92,6 @@ function addInteractions() {
 
 function managedPagination() {
 
-    if(!previousButton || nextButton) {
-        console.log("No button for pagination") ;
-        return ;
-    }
-
-
     previousButton.addEventListener("click", () => {
         if (currentIndex > 0) {
             currentIndex--;
@@ -126,7 +133,6 @@ async function renderShader(shader) {
     canvasContainer.appendChild(canvas);
 
     geometry = new THREE.PlaneGeometry(9, 6);
-
 
     camera.position.z = 5;
 
@@ -193,7 +199,10 @@ function setInformations(shader) {
 async function loadShader(index) {
     const shader = shaders[index];
 
-    setInformations(shader);
+    if(displayInfos)
+        setInformations(shader);
+
+    console.log("Loading shader:", shader.material);
 
     fragmentCodeElement.innerHTML = shader.material.fragmentShader;
     vertexCodeElement.innerHTML = shader.material.vertexShader;
@@ -242,6 +251,7 @@ async function generateHTML() {
     fullscreenButton.addEventListener('click', () => toggleFullscreen());
     presentingShaderSection.appendChild(fullscreenButton);
 }
+
 
 async function loadHTML(filePath, targetElementId) {
     try {

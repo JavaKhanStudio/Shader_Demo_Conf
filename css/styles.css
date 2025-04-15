@@ -261,6 +261,8 @@ button:hover {
     border: none;
 }
 
+button { cursor: pointer; }
+
 
 @media (width < 1400px) {
     .shader-grid{
