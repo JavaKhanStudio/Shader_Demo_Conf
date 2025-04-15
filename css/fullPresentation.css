@@ -4,7 +4,9 @@
     align-items: center;
     text-align: center;
     justify-content: space-between;
+    margin-top: 20px;
     margin-bottom: 20px;
+
 }
 
 pre {
@@ -104,7 +106,8 @@ body:has(canvas:fullscreen) {
     }
 
     #topSection {
-        flex-direction: column;
+        display:flex;
+        flex-direction: row;
         align-items: center;
         text-align: center;
     }

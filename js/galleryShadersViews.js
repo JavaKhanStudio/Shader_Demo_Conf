@@ -74,8 +74,12 @@ function createShaderView(shader) {
     const canvasWrapper = newCard.getElementsByClassName("shader-item")[0];
 
     const canvas = newCard.getElementsByTagName('canvas')[0];
+
     const title = newCard.getElementsByClassName("shader-name")[0];
     title.textContent = shader.name;
+
+    const author = newCard.getElementsByClassName("shader-author")[0];
+    author.textContent = "Made by : " + shader.author;
 
     const applyIt = newCard.getElementsByClassName("apply-text")[0];
     applyIt.textContent = "Apply it";
