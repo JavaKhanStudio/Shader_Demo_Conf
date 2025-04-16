@@ -178,9 +178,6 @@ async function renderShader(shader) {
 
 function setInformations(shader) {
 
-    // TODO repair this
-    return ;
-
     if(!titleSection) {
         console.log("no title section found") ;
         return ;
