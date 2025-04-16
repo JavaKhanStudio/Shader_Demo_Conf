@@ -12,12 +12,16 @@ import CLAUDE2025 from "./Claude_2025.js";
 import DEEPSEEK2025 from "./DeepSeek_2025.js";
 import GROK2025 from "./Grok_2025.js";
 import GPT2025V2 from "./GPT_2025_V2.js";
+import MISTRAL2025 from "./Mistral_2025.js"
+import GEMINI2025 from "./Gemini_2025.js"
 
 export const shaders = [
     GPT2025,
     CLAUDE2025,
     DEEPSEEK2025,
     GROK2025,
+    GEMINI2025,
+    MISTRAL2025,
     GPT2025V2,
     GradientShaderMaterial,
     GradientShaderMovingMaterial,

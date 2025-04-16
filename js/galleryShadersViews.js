@@ -180,7 +180,7 @@ function createShaderView(shader) {
         scene.remove(plane);
         renderer.dispose();
 
-        if (canvasWrapper.parentElement) {
+        if (canvasWrapper && canvasWrapper.parentElement) {
             canvasWrapper.parentElement.removeChild(canvasWrapper);
         }
     }
