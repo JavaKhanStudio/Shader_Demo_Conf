@@ -1,0 +1,106 @@
+# shader-demo-conf's TAGS AND THEIR CONTEXT PACKS, read by Atelier (projects/shader-demo-conf.toml
+# in the atelier checkout says packs = ".atelier/packs.toml"). A pack is what a session reads
+# BEFORE the code it describes, so when a change makes one wrong, fix it here IN THE SAME
+# COMMIT. Only [tags.<slug>] tables belong in this file: label, description, context, color, sort.
+#
+# Written at connect time (2026-09-26) from the code, the slides PDF and git log, without
+# having worked in the repo (there is no CLAUDE.md). Each line was checked against the code
+# once; a line marked (inferred) was not.
+
+[tags.shaders]
+label = "Shaders"
+description = "The GLSL materials: js/*ShaderMaterials/, their Z*List.js indexes, the explainer steps and jsCodeExplain/"
+color = "#c56cf0"
+sort = 10
+context = """
+One THREE.ShaderMaterial per file, in js/<category>ShaderMaterials/. A page shows only what the
+folder's list imports: aiMade, extern -> ZShadersList.js; style -> ZShaderList.js; toApply ->
+ZtoApplyShaderList.js; explainer steps -> explanationsShaderMaterials/explanationList.js; sounds ->
+explanationsSoundsShadersMaterials/soundsExplanationList.js.
+Unlisted today, so never shown: aiMadeShaderMaterials/GraySky.js, externShaderMaterials/monsterV2.js
+and trigGraph.js, toApplyShaderMaterials/thePuppy.js (unlisted in 7ad4f7b, "the puppy is breaking
+computer"), and all of js/complexShadersMaterials/ (its ZsimpleShadersList.js is imported by nothing).
+Entry shapes differ by folder: aiMade and extern files default-export {name, author, material};
+explainer steps {name, explanationFR, explanationENG, codeJS, material}; style and toApply files
+export a bare material, which the Z list wraps with name/author (toApply also baseImage,
+optionalImage2). Match the folder you add to (unlisted monsterV2.js and trigGraph.js have no name).
+The runtime drives uniforms BY NAME and nothing else: `time` (seconds) everywhere; `iTime` and
+`iResolution` only in the galleries (js/galleryShadersViews.js); `mousePosition` in the explainer;
+`amplitude`, `dominantFrequency`, `bandAmplitudes` on the sounds page; `uTexture` from the
+entry's baseImage in the explainer; in galleryToApplyShaderViews.js `uTexture_1..3` from baseImage,
+optionalImage2, optionalImage3, and an `intensity` uniform gets a slider. Any other uniform stays
+at its initial value (headerAmbienceShader's mousePosition does, in the AI gallery).
+Explainer steps: explanationENG and explanationFR are '' in every file of explanationsShaderMaterials/;
+codeJS names a file in jsCodeExplain/ that is fetched and shown as text, not run.
+Proof: open the page that lists it (viewer `site`, e.g. galleryAI.html) and read the console.
+"""
+
+[tags.webgl]
+label = "three.js runtime"
+description = "The JS that renders shaders: shaderExplanation.js (explainer pager), galleryShadersViews.js, galleryToApplyShaderViews.js, shaderInjector.js, audioInputs.js"
+color = "#48dbfb"
+sort = 20
+context = """
+THREE is a GLOBAL from <script src=".../three@0.153.0/build/three.min.js"> in each page's head;
+no bundler, no import map, no package.json. Modules use the global.
+build/three.min.js is gone from later three releases, so an upgrade means ES-module imports (inferred).
+js/shaderExplanation.js loadExplanations(kind): 'basics' (index.html), 'music'
+(explicationSounds.html), 'builder' (shaderBuilder.html, loads js/EmptyDefault.js).
+URL: ?page=N starts at step N, ?lang=FR|ENG picks the explanation text.
+It injects parts/fullPresentation.html into #main-placeholder. setInformations() writes to
+`titleSection`, a name declared nowhere: it reaches h1#titleSection only through the browser's
+id-named window global (titleElement reads #currentTitle, which does not exist).
+renderShader() makes a NEW WebGLRenderer and adds a resize listener on every step; the old one
+is removed from the DOM, never disposed.
+galleryShadersViews.js: at <=768px wide it pages 6 cards and disposes them; wider, every shader
+of the list gets its own WebGLRenderer at once, none disposed.
+shaderInjector.js injects extern shaders[1] into <header> AS SOON AS IT IS IMPORTED
+(window.injections); each injectShaderToElement call starts a requestAnimationFrame loop that never stops.
+audioInputs.js asks for the mic (getUserMedia) and publishes window.AudioAnalysisData; its toggle
+goes in #params, inside .interactionSection, which fullPresentation.html hides with style="display: none".
+Proof: no tests; open each page through viewer `site` and watch the console.
+"""
+
+[tags.site]
+label = "Pages & look"
+description = "The HTML pages, parts/ (header, footer, cards), css/, images/, the slides PDF, GitHub Pages hosting and the subsite framing"
+color = "#ff9f43"
+sort = 30
+context = """
+Static site, no build. Pages: index.html (Explanations), galleryExtern/AI/Style/ToApply.html,
+explicationSounds.html; the nav is parts/header.html. shaderBuilder.html is not in the nav
+(its link is parked in parts/TODO); singleDisplay.html loads js/singleshaderDisplay.js, which
+does not exist; parts/partPresentation.html is loaded by nothing.
+Header and footer are fetch()ed into #header-placeholder/#footer-placeholder by js/load-sections.js;
+code touching <header> waits on window.loadAllSections. fetch() needs HTTP: file:// breaks it.
+Serve it: viewer `site` (python3 -m http.server 8792 from the root).
+Every page repeats its own <head> (three CDN; font-awesome 6.0.0-beta3, Kanit and favicon
+images/LogoSBP.ico in all but shaderBuilder.html): a head change is made in each .html. Titles differ: "Shader Shop" mostly,
+"Document" on explicationSounds.html, "GPT-4 Code Generator" on shaderBuilder.html.
+Every local href/src/url is relative, which is why it works under /Shader_Demo_Conf/ and any subpath.
+Hosting: GitHub Pages, legacy build from main at / (https://javakhanstudio.github.io/Shader_Demo_Conf/):
+a push to main is live.
+css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0752CF) and .logo
+(images/LogoHeaderSBP.webp); #explanationSection is display:none there ("TODO finish later").
+parts/footer.html links the BDX I/O 2024 openfeedback page and the Google Slides deck;
+ThreeJS_Shader.pdf (8.2 MB, 61 slides, French) sits at the root and is served too.
+shaderBuilder.html sends a key typed by the visitor to api.openai.com, model 'gpt-4'.
+"""
+
+[tags.docs]
+label = "Docs & board words"
+description = "README.md and any agent doc; the packs, lexicon and doctrine"
+color = "#9fa8ff"
+sort = 110
+context = """
+The board's own upkeep lands here: the Maintenance tickets for Context packs, Lexicon,
+Tag vocabulary and Doctrine (atelier r853).
+.atelier/packs.toml holds one [tags.<slug>] per tag. A pack line names a file or a command;
+one that does not gets cut. `atelier --project shader-demo-conf doctor context_packs` lists paths that moved.
+Lexicon: `atelier --project shader-demo-conf term list`; a new word:
+  atelier --project shader-demo-conf term add "<word>" --short "<one line>" --tags <tag>
+.atelier/doctrine.md holds Simon's lines once he approves them. A change to one is a doubt
+(`atelier ask`), never an edit.
+README.md is two lines pointing at ThreeJS_Shader.pdf; there is no CLAUDE.md yet.
+The talk is French, the site's text English.
+"""
