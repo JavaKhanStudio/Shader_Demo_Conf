@@ -14,6 +14,8 @@ label.textContent = "Enable Audio Analysis";
 let paramsSpace = document.querySelector('#params')
 paramsSpace.appendChild(checkbox);
 paramsSpace.appendChild(label);
+// fullPresentation.html hides the section until a page has an interaction to put in it
+paramsSpace.closest('.interactionSection').style.display = '';
 
 checkbox.addEventListener("change", (event) => {
     isAnalyzing = event.target.checked;
