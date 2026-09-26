@@ -1,0 +1,81 @@
+/* First screen of index.html: what this site is, and where to go */
+.intro {
+    font-family: 'Kanit', Arial, sans-serif;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem var(--page-padding) 0.5rem;
+    color: var(--text-color);
+}
+
+.intro-kicker {
+    margin: 0;
+    color: var(--primary-red);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.9rem;
+}
+
+.intro-title {
+    margin: 0.2rem 0 0.4rem;
+    color: #1c1c1c;
+    font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+    line-height: 1.15;
+}
+
+.intro-lede {
+    margin: 0 0 1rem;
+    font-family: Arial, sans-serif;
+    line-height: var(--line-height);
+}
+
+.intro-lede a {
+    color: var(--primary-blue);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.intro-sections {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.6rem;
+}
+
+.intro-sections a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.8rem;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-blue);
+    color: var(--text-color);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.intro-sections a:hover {
+    border-left-color: var(--primary-red);
+    transform: translateY(-2px);
+}
+
+.intro-sections strong {
+    font-size: 1.1rem;
+    color: #1c1c1c;
+}
+
+.intro-sections span {
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.35;
+}
+
+@media (max-width: 600px) {
+    .intro-sections {
+        grid-template-columns: 1fr 1fr;
+    }
+}
