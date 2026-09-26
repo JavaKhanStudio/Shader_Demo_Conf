@@ -4,8 +4,8 @@ export default {
     material: new THREE.ShaderMaterial({
         uniforms: {
             time: {value: 0.0},
-            frequency: {value: 1.0},
-            amplitude: {value: 0.5},
+            frequency: {value: 8.0},
+            amplitude: {value: 0.25},
             speed: {value: 0.5}
         },
         vertexShader: `
@@ -33,8 +33,9 @@ export default {
           // Color variation based on wave intensity
           vec3 color = vec3(0.2 + wave, 0.5 + wave * 0.5, 0.8 + wave * 0.3);
   
-          // Add a soft glow effect
-          float glow = exp(-wave * 2.0) * 0.5;
+          // Add a soft glow effect on the calm parts; exp(-wave * 2.0) * 0.5 pushed
+          // every pixel past 1.0 and the card drew plain white
+          float glow = exp(-abs(wave) * 4.0) * 0.2;
           color += glow;
   
           gl_FragColor = vec4(color, 1.0);

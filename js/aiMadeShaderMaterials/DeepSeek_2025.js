@@ -5,7 +5,9 @@ export default {
     material: new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 },
-            resolution: { value: new THREE.Vector2() }
+            // No page drives 'resolution': at (0, 0) uv.x became 0/0 and the card drew blank.
+            // The gallery plane's size (12 x 8) gives the aspect it was meant to correct.
+            resolution: { value: new THREE.Vector2(12, 8) }
         },
         vertexShader: `
       varying vec2 vUv;
