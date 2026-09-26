@@ -37,6 +37,8 @@ const audioState = () => page.evaluate(`({
     contextsOpen: window.__contexts.filter(c => c.state !== 'closed').length,
     contexts: window.__contexts.length,
     checked: document.querySelector('#analyzeToggle').checked,
+    status: (document.querySelector('#micStatus') || {}).textContent || '',
+    statusShown: !!document.querySelector('#micStatus') && document.querySelector('#micStatus').getBoundingClientRect().height > 0,
     micIsOn: window.AudioAnalysisData.micIsOn,
 })`);
 const click = () => page.evaluate(`document.querySelector('#analyzeToggle').click()`);
@@ -84,7 +86,7 @@ if (visible) {
         await wait(800);
         const s = await audioState();
         console.log(`toggle ${i} ->`, want ? 'on ' : 'off', JSON.stringify(s));
-        if (want) expect(`toggle ${i} on: one live track, one open context`, s.tracksLive === 1 && s.contextsOpen === 1 && s.micIsOn);
+        if (want) expect(`toggle ${i} on: one live track, one open context, no mic message`, s.tracksLive === 1 && s.contextsOpen === 1 && s.micIsOn && !s.statusShown);
         else expect(`toggle ${i} off: no live track, no open context`, s.tracksLive === 0 && s.contextsOpen === 0 && !s.micIsOn);
     }
 
@@ -98,6 +100,15 @@ if (visible) {
     await page.evaluate(`document.querySelector('.interactionSection').scrollIntoView({block: 'center'})`);
     await shot(`sounds-${width}-denied.png`);
     expect('denied: box unchecked, micIsOn false, nothing open', !d.checked && !d.micIsOn && d.tracksLive === 0 && d.contextsOpen === 0);
+    expect('denied: the visitor is told the mic is blocked', d.statusShown && /blocked/i.test(d.status));
+
+    // allowed again: the next tick clears the message
+    await setMic('granted');
+    await click();
+    await wait(1000);
+    const g = await audioState();
+    console.log('granted again ->', JSON.stringify(g));
+    expect('granted again: message gone, mic on', !g.statusShown && g.micIsOn);
 }
 page.close();
 process.exit(failures.length ? 1 : 0);

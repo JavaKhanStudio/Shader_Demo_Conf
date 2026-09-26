@@ -51,6 +51,15 @@ h1 {
     font-size: 24px;
 }
 
+#micStatus {
+    margin: 0.5em 0 0;
+    color: #B00020;
+}
+
+#micStatus:empty {
+    display: none;
+}
+
 /* Shader and Explanation Section */
 #shaderAndExplanation {
     display: flex;

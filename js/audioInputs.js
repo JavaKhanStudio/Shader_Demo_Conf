@@ -14,12 +14,19 @@ label.textContent = "Enable Audio Analysis";
 let paramsSpace = document.querySelector('#params')
 paramsSpace.appendChild(checkbox);
 paramsSpace.appendChild(label);
+
+// Why the box unticked itself when the browser refused the mic; cleared on the next check
+const micStatus = document.createElement("p");
+micStatus.id = "micStatus";
+micStatus.setAttribute("role", "status");
+paramsSpace.appendChild(micStatus);
 // fullPresentation.html hides the section until a page has an interaction to put in it
 paramsSpace.closest('.interactionSection').style.display = '';
 
 checkbox.addEventListener("change", (event) => {
     isAnalyzing = event.target.checked;
     if (isAnalyzing) {
+        micStatus.textContent = "";
         startAnalysis();
     } else {
         stopAnalysis();
@@ -67,6 +74,9 @@ function startAnalysis() {
             }
             checkbox.checked = false;
             stopAnalysis();
+            micStatus.textContent = error.name === "NotFoundError"
+                ? "No microphone found: plug one in, then tick the box again."
+                : "Microphone blocked: allow it in the address bar, then tick the box again.";
         });
 }
 
