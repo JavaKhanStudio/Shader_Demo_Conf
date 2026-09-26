@@ -115,17 +115,14 @@ let currentShader;
 let camera;
 let geometry;
 let plane;
+let scene;
 
-async function renderShader(shader) {
-    currentShader = shader;
-    material = shader.material
+// One renderer, one render loop and one resize listener for the whole pager:
+// a step only swaps the plane's material (a renderer per step ran out of WebGL contexts).
+function createRenderer() {
     canvasContainer = document.getElementById("presentingShader");
 
-    if (canvas) {
-        canvas.remove();
-    }
-
-    const scene = new THREE.Scene();
+    scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
@@ -135,13 +132,6 @@ async function renderShader(shader) {
     geometry = new THREE.PlaneGeometry(9, 6);
 
     camera.position.z = 5;
-
-    if (shader.baseImage) {
-        const textureLoader = new THREE.TextureLoader();
-        textureLoader.load(shader.baseImage, (texture) => {
-            material.uniforms.uTexture = { value: texture };
-        });
-    }
 
     plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
@@ -174,6 +164,23 @@ async function renderShader(shader) {
     }
 
     window.addEventListener('resize', resizeHandler);
+}
+
+async function renderShader(shader) {
+    currentShader = shader;
+    material = shader.material
+
+    if (!renderer) {
+        createRenderer();
+    }
+    plane.material = material;
+
+    if (shader.baseImage) {
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.load(shader.baseImage, (texture) => {
+            material.uniforms.uTexture = { value: texture };
+        });
+    }
 }
 
 function setInformations(shader) {
