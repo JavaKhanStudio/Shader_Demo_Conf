@@ -57,8 +57,10 @@ of the list gets its own WebGLRenderer at once, none disposed.
 shaderInjector.js injects extern shaders[1] into <header> AS SOON AS IT IS IMPORTED
 (window.injections); each injectShaderToElement call starts a requestAnimationFrame loop that never stops.
 audioInputs.js asks for the mic (getUserMedia) and publishes window.AudioAnalysisData; its toggle
-goes in #params, inside .interactionSection, which fullPresentation.html hides with style="display: none".
+goes in #params, inside .interactionSection, which fullPresentation.html hides with style="display: none";
+audioInputs.js unhides that section itself. A new interaction must do the same.
 Proof: no tests; open each page through viewer `site` and watch the console.
+tools/sounds-mic-probe.mjs drives the sounds page in headless Chrome with a fake mic (needs a server on :8765).
 """
 
 [tags.site]
