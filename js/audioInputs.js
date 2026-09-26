@@ -21,15 +21,20 @@ checkbox.addEventListener("change", (event) => {
     isAnalyzing = event.target.checked;
     if (isAnalyzing) {
         startAnalysis();
-        window.AudioAnalysisData.micIsOn = true;
     } else {
         stopAnalysis();
     }
 });
 
+// What startAnalysis opened; stopAnalysis closes it, so the browser's mic indicator goes off.
+let audioContext;
+let micStream;
+
 function startAnalysis() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
+    // Made inside the click so the autoplay policy lets it run
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const context = audioContext;
+    const analyser = context.createAnalyser();
 
     // Adjust FFT size for better frequency resolution
     analyser.fftSize = 2048;
@@ -41,17 +46,40 @@ function startAnalysis() {
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-            const source = audioContext.createMediaStreamSource(stream);
+            // Unchecked (or checked again) while the browser was asking: this stream is not wanted
+            if (!isAnalyzing || context !== audioContext) {
+                stream.getTracks().forEach(track => track.stop());
+                return;
+            }
+            micStream = stream;
+            const source = context.createMediaStreamSource(stream);
             source.connect(analyser);
+            window.AudioAnalysisData.micIsOn = true;
 
             // Increase sampling rate for more responsive analysis
-            intervalId = setInterval(() => analyzeSound(analyser, timeDataArray, freqDataArray, bufferLength, audioContext), 50);
+            intervalId = setInterval(() => analyzeSound(analyser, timeDataArray, freqDataArray, bufferLength, context), 50);
         })
-        .catch(error => console.error("Microphone access denied:", error));
+        .catch(error => {
+            console.error("Microphone access denied:", error);
+            if (context !== audioContext) {
+                context.close();
+                return;
+            }
+            checkbox.checked = false;
+            stopAnalysis();
+        });
 }
 
 function stopAnalysis() {
     clearInterval(intervalId);
+    if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+        micStream = null;
+    }
+    if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+    }
     dominantFrequencyHistory = [];
     isAnalyzing = false;
     setBasicData();
