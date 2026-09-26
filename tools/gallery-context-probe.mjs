@@ -1,7 +1,8 @@
 // Count what a gallery keeps alive: WebGL contexts not lost, rAF callbacks run per frame
-// (one per render loop), cards and cards whose canvas has a live context; then click the
-// first card's "header" apply button 3 times and, on a phone (<= 768 px, paged), page
-// Next/Previous, and count again. Screenshots the gallery.
+// (one per render loop), and on-screen cards whose canvas has no live context; then apply
+// the first card's shader to header, main and footer, scroll through the page a viewport at
+// a time (one screenshot per stop: <name>-<width>-scrollNN.png) and, on a phone (<= 768 px,
+// paged), page Next/Previous, counting again at each step.
 //
 //   python3 -m http.server 8765 &   # from the repo root
 //   node tools/gallery-context-probe.mjs galleryAI.html [width] [outDir]
@@ -29,7 +30,7 @@ await page.beforeLoad(`
     };
     window.__rafPerFrame = 0;
     let count = 0, frame = -1;
-    const raf = window.requestAnimationFrame.bind(window);
+    const raf = window.__raf = window.requestAnimationFrame.bind(window);  // __raf: the probe's own, uncounted
     window.requestAnimationFrame = cb => raf(t => {
         if (t !== frame) { window.__rafPerFrame = count; count = 0; frame = t; }
         count++;
@@ -38,7 +39,8 @@ await page.beforeLoad(`
 `);
 await page.goto(`http://localhost:8765/${file}`, 5000);
 
-const state = () => page.evaluate(`(() => {
+// read after two frames, so the loop count is of a frame that ran after any start/stop
+const state = () => page.evaluate(`new Promise(r => __raf(() => __raf(r))).then(() => {
     const live = window.__gl.filter(g => !g.ctx.isContextLost());
     const cards = [...document.querySelectorAll('.shader-item')];
     return {
@@ -46,10 +48,23 @@ const state = () => page.evaluate(`(() => {
         liveInPage: live.filter(g => g.canvas.isConnected).length,
         header: live.filter(g => g.canvas.isConnected && g.canvas.closest('header')).length,
         cards: cards.length,
-        cardsDark: cards.filter(c => !live.some(g => g.canvas === c.querySelector('canvas'))).map(c => c.querySelector('.shader-name').textContent),
+        // a card only needs a context while it is on screen (galleryShadersViews starts/stops them)
+        cardsDark: cards.filter(c => { const r = c.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })
+            .filter(c => !live.some(g => g.canvas === c.querySelector('canvas'))).map(c => c.querySelector('.shader-name').textContent),
         rafPerFrame: window.__rafPerFrame,
     };
-})()`);
+})`);
+// poll until the on-screen cards are drawing and loops match renderers, or 10 s pass
+// (a loaded machine takes seconds to start them); the time it took is logged
+const settled = async () => {
+    const t0 = Date.now();
+    let s = await state();
+    while ((s.cardsDark.length || s.rafPerFrame > s.liveInPage) && Date.now() - t0 < 10000) {
+        await wait(250);
+        s = await state();
+    }
+    return { ...s, settleMs: Date.now() - t0 };
+};
 const failures = [];
 const check = (label, s) => {
     console.log(label.padEnd(22), JSON.stringify(s));
@@ -58,21 +73,30 @@ const check = (label, s) => {
     if (s.live > s.liveInPage) failures.push(`${label}: ${s.live - s.liveInPage} contexts alive off the page`);
 };
 
-check('loaded', await state());
-// the whole page: grow the viewport to the document (a beyond-viewport capture leaves WebGL blank)
-const fullHeight = await page.evaluate('document.documentElement.scrollHeight');
-await page.send('Emulation.setDeviceMetricsOverride', { width, height: fullHeight, deviceScaleFactor: 1, mobile: width < 720 });
-await wait(1500);
-await page.screenshot(join(outDir, `${file.replace('.html', '')}-${width}.png`));
-await page.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width < 720 });
-await wait(500);
+check('loaded', await settled());
 
-for (let i = 0; i < 3; i++) {
-    await page.evaluate(`document.querySelector('.shader-item .header-icon').click()`);
+// apply the first card's shader to header, main and footer: each area gets its own renderer
+for (const area of ['header', 'main', 'footer', 'header', 'header']) {
+    await page.evaluate(`document.querySelector('.shader-item .${area}-icon').click()`);
     await wait(300);
 }
 await wait(500);
-check('header applied x3', await state());
+check('applied h,m,f,h,h', await settled());
+
+// scroll through the page a viewport at a time: every card on screen must be drawing
+const name = file.replace('.html', '');
+const pageHeight = await page.evaluate('document.documentElement.scrollHeight');
+let frame = 0;
+for (let y = 0; ; y += 700) {
+    await page.evaluate(`window.scrollTo(0, ${y})`);
+    await wait(800);
+    check(`scrolled to ${y}`, await settled());
+    await page.screenshot(join(outDir, `${name}-${width}-scroll${String(frame++).padStart(2, '0')}.png`));
+    if (y + 900 >= pageHeight) break;
+}
+await page.evaluate('window.scrollTo(0, 0)');
+await wait(800);
+check('back to the top', await settled());
 
 if (await page.evaluate(`!!document.querySelector('.pagination-controls .next')`)) {
     for (const sel of ['.next', '.next', '.previous', '.previous']) {
@@ -80,7 +104,7 @@ if (await page.evaluate(`!!document.querySelector('.pagination-controls .next')`
         await wait(400);
     }
     await wait(500);
-    check('paged next x2, prev x2', await state());
+    check('paged next x2, prev x2', await settled());
 }
 if (warnings.length) failures.push(`${warnings.length} context warnings: ${warnings[0]}`);
 failures.forEach(f => console.log('FAIL', f));

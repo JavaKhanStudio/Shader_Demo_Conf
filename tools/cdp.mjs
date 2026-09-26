@@ -16,10 +16,12 @@ export async function openChrome({ width = 1280, height = 1100, flags = [] } = {
     ], { stdio: 'ignore' });
 
     let target;
-    for (let i = 0; i < 50 && !target; i++) {
+    // a cold Chrome, or several probes at once, can take more than 10 s to open its port
+    for (let i = 0; i < 100 && !target; i++) {
         await wait(200);
         try { target = (await (await fetch(`http://127.0.0.1:${port}/json`)).json()).find(t => t.type === 'page'); } catch { }
     }
+    if (!target) { chrome.kill(); throw new Error(`Chrome did not open its DevTools port ${port} in 20 s`); }
     const ws = new WebSocket(target.webSocketDebuggerUrl);
     await new Promise(r => ws.onopen = r);
     let id = 0;

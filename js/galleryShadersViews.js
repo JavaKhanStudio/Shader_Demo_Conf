@@ -73,8 +73,6 @@ function createShaderView(shader) {
     console.log("shader", shader, "newCard", newCard);
     const canvasWrapper = newCard.getElementsByClassName("shader-item")[0];
 
-    const canvas = newCard.getElementsByTagName('canvas')[0];
-
     const title = newCard.getElementsByClassName("shader-name")[0];
     title.textContent = shader.name;
 
@@ -96,58 +94,78 @@ function createShaderView(shader) {
         buttonContainer.appendChild(button);
     });
 
+    let canvas = newCard.getElementsByTagName('canvas')[0];
+    let scene;
+    let camera;
+    let renderer;
+    let plane;
+    let animationFrameId;
+    let running = false;
+
     const fullscreenButton = newCard.getElementsByClassName("shader-title")[0].getElementsByClassName('fullscreen-btn')[0];
-    fullscreenButton.addEventListener('click', () => toggleFullscreen(canvas, camera, renderer));
+    fullscreenButton.addEventListener('click', () => {
+        if (running) toggleFullscreen(canvas, camera, renderer);
+    });
 
     gridContainer.appendChild(newCard);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-    let renderer;
-    if (shader.translucide) {
-        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, premultipliedAlpha: false });
-        renderer.setClearColor(0x000000, 0);
-        shader.material.blending = THREE.NormalBlending;
-        camera.near = 0.1;
-        camera.far = 1000;
-        camera.updateProjectionMatrix();
-    } else {
-        renderer = new THREE.WebGLRenderer({ canvas });
+    // A card holds a WebGL context only while it is on (or near) the screen: browsers cap
+    // live contexts (16 in Chrome), and a wide gallery shows every card of the list at once.
+    function start() {
+        if (running) return;
+        running = true;
+
+        // a canvas whose context was lost cannot get a new one: draw on a fresh canvas
+        const freshCanvas = canvas.cloneNode(false);
+        canvas.replaceWith(freshCanvas);
+        canvas = freshCanvas;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+        if (shader.translucide) {
+            renderer = new THREE.WebGLRenderer({ canvas, alpha: true, premultipliedAlpha: false });
+            renderer.setClearColor(0x000000, 0);
+            shader.material.blending = THREE.NormalBlending;
+            camera.near = 0.1;
+            camera.far = 1000;
+            camera.updateProjectionMatrix();
+        } else {
+            renderer = new THREE.WebGLRenderer({ canvas });
+        }
+
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        holdingInnerWidth = canvas.clientWidth;
+        holdingInnerHeight = canvas.clientHeight;
+        camera.position.z = 4;
+
+        const geometry = new THREE.PlaneGeometry(12, 8);
+        plane = new THREE.Mesh(geometry, shader.material);
+        scene.add(plane);
+
+        function animate(time) {
+            if (!running) return;
+
+            // Set iTime cause i am lazy
+            if (shader.material.uniforms && shader.material.uniforms.iTime) {
+                shader.material.uniforms.iTime.value = time * 0.001;
+            }
+            if (shader.material.uniforms && shader.material.uniforms.time) {
+                shader.material.uniforms.time.value = time * 0.001;
+            }
+            if (shader.material.uniforms && shader.material.uniforms.iResolution) {
+                shader.material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight, 1.0);
+            }
+
+            renderer.render(scene, camera);
+            animationFrameId = requestAnimationFrame(animate);
+        }
+        animate();
+        resizeHandler();
+        window.addEventListener('resize', resizeHandler);
     }
 
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    holdingInnerWidth = canvas.clientWidth;
-    holdingInnerHeight = canvas.clientHeight;
-    camera.position.z = 4;
-
-    const geometry = new THREE.PlaneGeometry(12, 8);
-    const plane = new THREE.Mesh(geometry, shader.material);
-    scene.add(plane);
-
-    let animationFrameId;
-    let disposed = false;
-
-    function animate(time) {
-        if (disposed) return;
-
-        // Set iTime cause i am lazy
-        if (shader.material.uniforms && shader.material.uniforms.iTime) {
-            shader.material.uniforms.iTime.value = time * 0.001;
-        }
-        if (shader.material.uniforms && shader.material.uniforms.time) {
-            shader.material.uniforms.time.value = time * 0.001;
-        }
-        if (shader.material.uniforms && shader.material.uniforms.iResolution) {
-            shader.material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight, 1.0);
-        }
-
-        renderer.render(scene, camera);
-        animationFrameId = requestAnimationFrame(animate);
-    }
-    animate();
-    resizeHandler();
     function resizeHandler() {
-        if (disposed) return;
+        if (!running) return;
 
         if (fullRenderer === renderer) {
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -162,25 +180,28 @@ function createShaderView(shader) {
         camera.updateProjectionMatrix();
     }
 
-    window.addEventListener('resize', resizeHandler);
-
-    function dispose() {
-        disposed = true;
+    // Frees the context; the material stays, the header may be wearing it
+    function stop() {
+        if (!running || fullRenderer === renderer) return;
+        running = false;
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         window.removeEventListener('resize', resizeHandler);
-
-        if (plane.material) {
-            if (plane.material.uniforms && plane.material.uniforms.texture) {
-                plane.material.uniforms.texture.value.dispose();
-            }
-            plane.material.dispose();
-        }
 
         plane.geometry.dispose();
         scene.remove(plane);
         renderer.dispose();
-        // dispose() keeps the WebGL context: without this, paging hits the browser's context cap
+        // dispose() keeps the WebGL context: without this, paging and scrolling hit the browser's context cap
         renderer.forceContextLoss();
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => entry.isIntersecting ? start() : stop());
+    }, { rootMargin: '200px 0px' });
+    observer.observe(newCard);
+
+    function dispose() {
+        observer.disconnect();
+        stop();
 
         if (canvasWrapper && canvasWrapper.parentElement) {
             canvasWrapper.parentElement.removeChild(canvasWrapper);
