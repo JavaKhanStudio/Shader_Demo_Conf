@@ -1,7 +1,17 @@
 export default {
   name: 'Adding Time',
-  explanationFR: '',
-  explanationENG: '',
+  explanationFR: `Un uniform est une valeur globale, la même pour chaque pixel pendant une exécution, et qui peut être injectée avec Javascript.
+
+- Le code Javascript ci-dessous écrit le temps écoulé (en secondes) dans l'uniform time à chaque image.
+- sin(time * speed) oscille entre -1.0 et 1.0 ; il pilote le vert.
+- Le rouge suit toujours vUv.x.
+La couleur change à chaque image, sans rien recalculer côté Javascript.`,
+  explanationENG: `A uniform is a global value, the same for every pixel during one run, and it can be injected from Javascript.
+
+- The Javascript code below writes the elapsed time (in seconds) into the time uniform every frame.
+- sin(time * speed) swings between -1.0 and 1.0; it drives the green.
+- Red still follows vUv.x.
+The colour changes every frame with nothing recomputed in Javascript.`,
   codeJS: "./js/explanationsShaderMaterials/jsCodeExplain/04_AddingTime.js",
   material: new THREE.ShaderMaterial({
     uniforms: {

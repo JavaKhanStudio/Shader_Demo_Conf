@@ -1,7 +1,17 @@
 export default {
     name: 'Optimisation',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Le même carré noir, sans if.
+
+Sur un GPU, un if par pixel coûte cher : les pixels voisins s'exécutent ensemble et doivent attendre les deux branches.
+- step(0.4, vUv.x) vaut 0.0 avant 0.4 et 1.0 après ; multiplié par step(vUv.x, 0.6), on obtient 1.0 seulement entre 0.4 et 0.6.
+- inRange = inRangeX * inRangeY : 1.0 au centre, 0.0 ailleurs.
+- mix(dégradé, noir, inRange) choisit la couleur sans condition.`,
+    explanationENG: `The same black square, with no if.
+
+On a GPU an if per pixel is expensive: neighbouring pixels run together and wait for both branches.
+- step(0.4, vUv.x) is 0.0 below 0.4 and 1.0 above; multiplied by step(vUv.x, 0.6) it is 1.0 only between 0.4 and 0.6.
+- inRange = inRangeX * inRangeY: 1.0 in the centre, 0.0 elsewhere.
+- mix(gradient, black, inRange) picks the colour without a condition.`,
     material: new THREE.ShaderMaterial({
         vertexShader: `
         varying vec2 vUv;

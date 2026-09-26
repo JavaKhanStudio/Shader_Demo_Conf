@@ -1,7 +1,19 @@
 export default {
     name: 'Functions',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Les fonctions trigonométriques du GLSL, dessinées.
+
+Le plan est coupé en six bandes : sin (rouge), cos (vert), tan (bleu), puis leurs inverses 1/sin (jaune), 1/cos (magenta), 1/tan (cyan).
+- x avance avec time : les courbes défilent.
+- plotLine() allume un pixel quand il est proche de la courbe, avec smoothstep pour un bord doux.
+- mix() pose la couleur de la courbe sur le fond blanc ; mod() trace les séparations noires.
+sin et cos sont les outils de base de toute animation dans un shader.`,
+    explanationENG: `GLSL's trigonometric functions, drawn.
+
+The plane is cut into six bands: sin (red), cos (green), tan (blue), then their inverses 1/sin (yellow), 1/cos (magenta), 1/tan (cyan).
+- x moves with time: the curves scroll.
+- plotLine() lights a pixel when it is close to the curve, with smoothstep for a soft edge.
+- mix() lays the curve's colour on the white background; mod() draws the black separators.
+sin and cos are the basic tools of every animation in a shader.`,
     material: new THREE.ShaderMaterial({
         uniforms: {
             time: {value: 0.0},

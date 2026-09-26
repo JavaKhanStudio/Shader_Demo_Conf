@@ -1,7 +1,11 @@
 export default {
     name: 'Image Work Inverted',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Un seul signe change : > 1.5 devient < 1.5.
+
+Ce sont maintenant les pixels sombres qui ondulent, et les zones claires restent intactes. Un caractère suffit à changer tout l'effet.`,
+    explanationENG: `A single sign changes: > 1.5 becomes < 1.5.
+
+Now the dark pixels ripple and the bright areas stay untouched. One character is enough to change the whole effect.`,
     baseImage: './images/syn/youngSitting.jpg',
     material: new THREE.ShaderMaterial({
         uniforms: {

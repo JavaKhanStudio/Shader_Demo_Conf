@@ -1,7 +1,17 @@
 export default {
     name: 'Image Partly Gray',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Seulement une partie en gris.
+
+- blueIntensity = color.b - color.r mesure à quel point un pixel est plus bleu que rouge.
+- Au-dessus de 0.3 (le ciel, les tons bleus), le pixel passe en gris.
+- Les autres pixels gardent leur couleur.
+Chaque pixel décide pour lui-même, d'après sa seule couleur.`,
+    explanationENG: `Only part of it in gray.
+
+- blueIntensity = color.b - color.r measures how much bluer than red a pixel is.
+- Above 0.3 (the sky, the blue tones) the pixel turns gray.
+- Every other pixel keeps its colour.
+Each pixel decides for itself, from its own colour alone.`,
     baseImage: './images/syn/youngSitting.jpg',
     material: new THREE.ShaderMaterial({
         uniforms: {

@@ -30,8 +30,9 @@ The runtime drives uniforms BY NAME and nothing else: `time` (seconds) everywher
 entry's baseImage in the explainer; in galleryToApplyShaderViews.js `uTexture_1..3` from baseImage,
 optionalImage2, optionalImage3, and an `intensity` uniform gets a slider. Any other uniform stays
 at its initial value (headerAmbienceShader's mousePosition does, in the AI gallery).
-Explainer steps: explanationENG and explanationFR are '' in every file of explanationsShaderMaterials/;
-codeJS names a file in jsCodeExplain/ that is fetched and shown as text, not run.
+Explainer steps: explanationENG/explanationFR hold the "Code Explanation" text (?lang=FR|ENG picks one;
+an empty one hides the box, as on the sounds page). They are written by tools/fill_explanations.py:
+edit the text there and re-run it, or the next run overwrites a hand edit. codeJS names a file in jsCodeExplain/ that is fetched and shown as text, not run.
 Proof: open the page that lists it (viewer `site`, e.g. galleryAI.html) and read the console.
 """
 
@@ -83,7 +84,8 @@ Every local href/src/url is relative, which is why it works under /Shader_Demo_C
 Hosting: GitHub Pages, legacy build from main at / (https://javakhanstudio.github.io/Shader_Demo_Conf/):
 a push to main is live.
 css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0752CF) and .logo
-(images/LogoHeaderSBP.webp); #explanationSection is display:none there ("TODO finish later").
+(images/LogoHeaderSBP.webp). #explanationSection is display:none in css/fullPresentation.css;
+js/shaderExplanation.js setInformations() shows it only when the step has a text.
 parts/footer.html links the BDX I/O 2024 openfeedback page and the Google Slides deck;
 ThreeJS_Shader.pdf (8.2 MB, 61 slides, French) sits at the root and is served too.
 shaderBuilder.html sends a key typed by the visitor to api.openai.com, model 'gpt-4'.

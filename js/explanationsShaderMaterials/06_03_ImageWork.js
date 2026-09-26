@@ -1,7 +1,15 @@
 export default {
     name: 'Image Work',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `On combine : image, condition et temps.
+
+- Les pixels bleus passent en gris, comme à l'étape précédente.
+- Les pixels clairs (r + g + b > 1.5) reçoivent un décalage : shift = sin(time + color.r * 10.0 + vUv.x * 2.0) * 0.2.
+- Ce décalage est ajouté au rouge et au bleu, retiré au vert : les zones claires changent de teinte en vague, au fil du temps.`,
+    explanationENG: `Putting it together: image, condition and time.
+
+- Blue pixels turn gray, as in the previous step.
+- Bright pixels (r + g + b > 1.5) get a shift: shift = sin(time + color.r * 10.0 + vUv.x * 2.0) * 0.2.
+- The shift is added to red and blue and taken from green: bright areas change hue in a wave over time.`,
     baseImage: './images/syn/youngSitting.jpg',
     material: new THREE.ShaderMaterial({
         uniforms: {

@@ -1,7 +1,17 @@
 export default {
     name: 'Too Much',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Trop, c'est trop.
+
+On reprend l'image travaillée et on déplace aussi l'endroit où on la lit :
+- uvOffset décale vUv selon sin(time * 10.0) et cos(time * 10.0) : l'image tremble.
+- Les zones claires et les zones sombres tremblent en sens opposé et changent de teinte en sens opposé.
+Tout est possible, mais tout n'est pas une bonne idée.`,
+    explanationENG: `Too much is too much.
+
+Take the worked image and also move where it is read:
+- uvOffset shifts vUv by sin(time * 10.0) and cos(time * 10.0): the image shakes.
+- Bright and dark areas shake in opposite directions and shift hue in opposite directions.
+Anything is possible; not everything is a good idea.`,
     baseImage: './images/syn/youngSitting.jpg',
     material: new THREE.ShaderMaterial({
         uniforms: {

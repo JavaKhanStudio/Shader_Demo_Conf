@@ -1,7 +1,15 @@
 export default {
     name: 'Image Gray',
-    explanationFR: '',
-    explanationENG: '',
+    explanationFR: `Une image en noir et blanc.
+
+- On lit la couleur de l'image avec texture2D.
+- La moyenne (r + g + b) / 3.0 donne un gris.
+- vec3(grayscale) met ce gris dans le rouge, le vert et le bleu ; color.a garde la transparence d'origine.`,
+    explanationENG: `An image in black and white.
+
+- Read the image's colour with texture2D.
+- The average (r + g + b) / 3.0 gives a gray.
+- vec3(grayscale) puts that gray in red, green and blue; color.a keeps the original transparency.`,
     baseImage: './images/syn/youngSitting.jpg',
     material: new THREE.ShaderMaterial({
         uniforms: {

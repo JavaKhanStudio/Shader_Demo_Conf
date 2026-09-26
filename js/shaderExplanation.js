@@ -185,11 +185,11 @@ function setInformations(shader) {
 
     titleSection.textContent = shader.name;
 
-    if (currentLang === 'ENG') {
-        explanationElement.value = shader.explanationENG;
-    } else if (currentLang === 'FR') {
-        explanationElement.value = shader.explanationFR;
-    }
+    const explanation = currentLang === 'FR' ? shader.explanationFR : shader.explanationENG;
+    explanationElement.value = explanation || "";
+    explanationSectionElement.style.display = explanation ? "flex" : "none";
+    explanationElement.style.height = "auto";
+    explanationElement.style.height = explanationElement.scrollHeight + "px";
 
 }
 
@@ -225,6 +225,7 @@ async function loadShader(index) {
 
 let titleElement;
 let explanationElement;
+let explanationSectionElement;
 let presentingShaderSection;
 let fragmentCodeElement;
 let vertexCodeElement;
@@ -236,6 +237,7 @@ async function generateHTML() {
     await loadHTML("./parts/fullPresentation.html", "main-placeholder");
     titleElement = document.getElementById("currentTitle");
     explanationElement = document.getElementById("explanation");
+    explanationSectionElement = document.getElementById("explanationSection");
     presentingShaderSection = document.getElementById("presentingShader");
     fragmentCodeElement = document.getElementById("fragmentCode");
     vertexCodeElement = document.getElementById("vertexCode");

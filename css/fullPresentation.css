@@ -21,7 +21,7 @@ h1 {
     font-size: 2rem;
 }
 
-/* TODO finish later */
+/* Hidden until setInformations() has a text for the step (the sounds page and the builder have none) */
 #explanationSection {
     display: none;
 }
@@ -59,6 +59,10 @@ h1 {
 
 #explanation {
     grid-column: span 2;
+    min-height: 6em;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    resize: vertical;
 }
 
 #titleSection {
