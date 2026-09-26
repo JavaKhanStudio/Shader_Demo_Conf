@@ -271,10 +271,6 @@ button { cursor: pointer; }
 }
 
 @media (width < 600px) {
-    h1 {
-        font-size: 55px !important;
-    }
-
     .painter-shader-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
     }
@@ -283,4 +279,30 @@ button { cursor: pointer; }
         grid-template-columns: 1fr;
     }
 
+}
+/* Phones: the six nav links wrap into two rows of three, the header shrinks to fit */
+@media (max-width: 600px) {
+    nav {
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        flex: 1 0 33%;
+        box-sizing: border-box;
+        padding: 0.6em 0.2em;
+        border-bottom: 1px solid #333;
+    }
+
+    header {
+        height: 90px;
+    }
+
+    header h1 {
+        font-size: 2.6em;
+    }
+
+    header .logo {
+        width: 110px;
+        height: 90px;
+    }
 }

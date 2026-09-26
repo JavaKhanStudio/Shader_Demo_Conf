@@ -118,7 +118,15 @@ body:has(canvas:fullscreen) {
 
     #topSection button {
         margin-top: 10px;
-        width: 100%;
+        width: auto;
+        flex-shrink: 0;
+        padding: 8px 10px;
+    }
+
+    #titleSection {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 1.4rem;
     }
 
     #presentingShader {

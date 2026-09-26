@@ -41,7 +41,8 @@ with sync_playwright() as p:
             pg.evaluate("s => document.querySelectorAll(s).forEach(e => e.remove())", sel)
         path = f"{a.out}-{w}.png"
         pg.screenshot(path=path, full_page=a.full)
-        print(path, "errors:", errors or "none")
+        sw = pg.evaluate("document.documentElement.scrollWidth")
+        print(path, "errors:", errors or "none", f"scrollWidth={sw}" + ("" if sw <= w else " OVERFLOWS"))
         if a.links:
             for href in pg.eval_on_selector_all("nav a, .intro a", "as => as.map(a => a.getAttribute('href'))"):
                 if href.startswith("http"):
