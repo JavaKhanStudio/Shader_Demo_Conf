@@ -179,6 +179,8 @@ function createShaderView(shader) {
         plane.geometry.dispose();
         scene.remove(plane);
         renderer.dispose();
+        // dispose() keeps the WebGL context: without this, paging hits the browser's context cap
+        renderer.forceContextLoss();
 
         if (canvasWrapper && canvasWrapper.parentElement) {
             canvasWrapper.parentElement.removeChild(canvasWrapper);

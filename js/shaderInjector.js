@@ -33,27 +33,31 @@ export function injectShaderToElement(shader, elementSelector) {
         camera.position.z = 1;
 
         window.addEventListener('resize', () => resize(elementSelector));
+
+        // One loop per element: applying another shader only swaps the plane below
+        const entry = elementMap[elementSelector];
+        function animate(time) {
+            const material = entry.currentPlane.material;
+            if (material.uniforms && material.uniforms.time) {
+                material.uniforms.time.value = time * 0.001;
+            }
+            requestAnimationFrame(animate);
+            entry.renderer.render(entry.scene, entry.camera);
+        }
+        requestAnimationFrame(animate);
     }
 
     const { scene, renderer, camera, currentPlane } = elementMap[elementSelector];
 
     if (currentPlane) {
         currentPlane.material.dispose();
+        currentPlane.geometry.dispose();
         scene.remove(currentPlane);
     }
 
     const geometry = new THREE.PlaneGeometry(20, 2);
     elementMap[elementSelector].currentPlane = new THREE.Mesh(geometry, shader.material);
     scene.add(elementMap[elementSelector].currentPlane);
-
-    function animate(time) {
-        if (shader.material.uniforms && shader.material.uniforms.time) {
-            shader.material.uniforms.time.value = time * 0.001;
-        }
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
 
     function resize(selector) {
         const { renderer, camera, currentPlane } = elementMap[selector];

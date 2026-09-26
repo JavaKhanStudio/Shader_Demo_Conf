@@ -55,10 +55,14 @@ The pager keeps ONE WebGLRenderer, render loop and resize listener (createRender
 first step); renderShader() only swaps plane.material. Never create a renderer per step: it hit
 Chrome's 16-context cap. Proof: tools/explainer-context-probe.mjs (walks every step twice, counts
 live contexts and rAF loops), tools/explainer_swap_sheet.py (walked vs fresh ?page=N per step).
-galleryShadersViews.js: at <=768px wide it pages 6 cards and disposes them; wider, every shader
-of the list gets its own WebGLRenderer at once, none disposed.
+galleryShadersViews.js: at <=768px wide it pages 6 cards; paging disposes them AND calls
+renderer.forceContextLoss() (dispose() alone keeps the context). Wider, every shader of the list
+gets its own WebGLRenderer at once: the AI gallery is 15 cards + the header = 16, Chrome's cap.
 shaderInjector.js injects extern shaders[1] into <header> AS SOON AS IT IS IMPORTED
-(window.injections); each injectShaderToElement call starts a requestAnimationFrame loop that never stops.
+(window.injections), which misses when the header part is not loaded yet (galleryStyle has no
+header shader until one is applied). One renderer and ONE loop per element; injecting again
+only swaps the plane. Proof: tools/gallery-context-probe.mjs <page> <width> (contexts, loops,
+dark cards, apply x3, paging; full-page render).
 audioInputs.js asks for the mic (getUserMedia) and publishes window.AudioAnalysisData; its toggle
 goes in #params, inside .interactionSection, which fullPresentation.html hides with style="display: none";
 audioInputs.js unhides that section itself. A new interaction must do the same.
