@@ -36,13 +36,12 @@ export default new THREE.ShaderMaterial({
             
             color_around = texture2D(uTexture_3, mod(vec2(vUv.x + time + decal, vUv.y), 1.0)); 
            
-            while(getLength(color_around) > 2.9)
-            {
+            // Search one texel at a time (the images/bebe/ pictures are 682 wide): a step of
+            // 1e-7 meant up to 10 million texture reads per pixel and froze the page (7ad4f7b).
+            for (int i = 0; i < 682; i++) {
+                if (getLength(color_around) <= 2.9) break;
+                decal += 1.0 / 682.0;
                 color_around = texture2D(uTexture_3, mod(vec2(vUv.x + time + decal, vUv.y), 1.0));
-                decal += 0.0000001 ; 
-                if(decal > 1.0) {
-                    break ; 
-                }
             }
             color_final = color_around ; 
         } else {

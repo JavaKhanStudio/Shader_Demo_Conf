@@ -17,9 +17,8 @@ One THREE.ShaderMaterial per file, in js/<category>ShaderMaterials/. A page show
 folder's list imports: aiMade, extern -> ZShadersList.js; style -> ZShaderList.js; toApply ->
 ZtoApplyShaderList.js; explainer steps -> explanationsShaderMaterials/explanationList.js; sounds ->
 explanationsSoundsShadersMaterials/soundsExplanationList.js.
-Unlisted today, so never shown: toApplyShaderMaterials/thePuppy.js (unlisted in 7ad4f7b, "the puppy
-is breaking computer": a while loop of up to 10M texture reads per pixel); it waits on r4.
-tools/orphan_shaders_probe.py renders it with the real gallery code.
+Every shader file is in a list (r4, 2026-10-02). thePuppy.js was unlisted once for freezing the
+page (7ad4f7b): a loop stepping 1e-7 per read. A search loop in GLSL steps one texel, bounded.
 The two tunnels by nayk (extern tunnel.js, tunnelV2.js) carry no ref: their source link is unknown.
 Entry shapes differ by folder: aiMade and extern files default-export {name, author, material};
 explainer steps {name, explanationFR, explanationENG, codeJS, material}; style and toApply files
