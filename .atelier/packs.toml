@@ -30,6 +30,9 @@ The runtime drives uniforms BY NAME and nothing else: `time` (seconds) everywher
 entry's baseImage in the explainer; in galleryToApplyShaderViews.js `uTexture_1..3` from baseImage,
 optionalImage2, optionalImage3, and an `intensity` uniform gets a slider. Any other uniform stays
 at its initial value (headerAmbienceShader's mousePosition does, in the AI gallery).
+#shaders and #webgl stay two tags (Simon, d1, 2026-10-02): writing GLSL and fixing the renderer are
+different jobs. A shader that needs a uniform the runtime does not feed yet is a runtime change too:
+raise that half as a #webgl task rather than editing the renderer under #shaders.
 Explainer steps: explanationENG/explanationFR hold the "Code Explanation" text (?lang=FR|ENG picks one;
 an empty one hides the box, as on the sounds page). They are written by tools/fill_explanations.py:
 edit the text there and re-run it, or the next run overwrites a hand edit. codeJS names a file in jsCodeExplain/ that is fetched and shown as text, not run.
