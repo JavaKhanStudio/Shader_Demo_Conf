@@ -83,8 +83,8 @@ sort = 30
 context = """
 Static site, no build. Pages: index.html (Explanations), galleryExtern/AI/Style/ToApply.html,
 explicationSounds.html; the nav is parts/header.html. shaderBuilder.html is not in the nav
-(its link is parked in parts/TODO); singleDisplay.html loads js/singleshaderDisplay.js, which
-does not exist; parts/partPresentation.html is loaded by nothing.
+(its link is parked in parts/TODO); parts/partPresentation.html is loaded by nothing (both wait on
+Simon's r4 answer). tools/orphan_shaders_probe.py renders whatever no list or page loads.
 Header and footer are fetch()ed into #header-placeholder/#footer-placeholder by js/load-sections.js;
 code touching <header> waits on window.loadAllSections. fetch() needs HTTP: file:// breaks it.
 Serve it: viewer `site` (python3 -m http.server 8792 from the root).
