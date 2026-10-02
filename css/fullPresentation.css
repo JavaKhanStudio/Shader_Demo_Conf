@@ -21,7 +21,7 @@ h1 {
     font-size: 2rem;
 }
 
-/* Hidden until setInformations() has a text for the step (the sounds page and the builder have none) */
+/* Hidden until setInformations() has a text for the step (the sounds page has none) */
 #explanationSection {
     display: none;
 }

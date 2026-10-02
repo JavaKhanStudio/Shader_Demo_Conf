@@ -33,7 +33,7 @@ const PUBLIC = {
   'explicationSounds.html': BASE + 'explicationSounds.html',
 };
 /** root pages deliberately kept out of the sitemap (parts/* are fragments, never listed) */
-const PRIVATE = ['shaderBuilder.html'];
+const PRIVATE = [];
 
 const attr = (html, re) => (html.match(re) || [])[1] ?? null;
 

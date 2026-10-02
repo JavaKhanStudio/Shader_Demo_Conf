@@ -2,7 +2,6 @@ let shaders = [];
 let currentLang;
 let currentIndex = 0;
 let asSounds = false;
-let displayInfos = true ;
 export async function loadExplanations(explanationToLoad) {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,19 +18,9 @@ export async function loadExplanations(explanationToLoad) {
             const module = await import('./explanationsSoundsShadersMaterials/soundsExplanationList.js');
             shaders = module.shaders;
             asSounds = true;
-        } else if(explanationToLoad === 'builder') {
-            let shaderBuilder = (await import('./EmptyDefault.js')).default ;
-
-            console.log(shaderBuilder) ;
-            console.log(shaderBuilder.material) ;
-            shaders = [shaderBuilder] ;
-            displayInfos = false ;
         }
 
-        if(displayInfos)
-            await generateHTML();
-        else
-            await generateHTML();
+        await generateHTML();
 
         addInteractions();
 
@@ -203,8 +192,7 @@ function setInformations(shader) {
 async function loadShader(index) {
     const shader = shaders[index];
 
-    if(displayInfos)
-        setInformations(shader);
+    setInformations(shader);
 
     console.log("Loading shader:", shader.material);
 

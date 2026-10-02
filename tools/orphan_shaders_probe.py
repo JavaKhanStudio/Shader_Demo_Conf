@@ -9,10 +9,9 @@ galleryExtern.html is loaded with its list (js/externShaderMaterials/ZShadersLis
 one naming the orphans; galleryToApply.html with The Puppy entry as it was before 7ad4f7b.
 Prints, per page, the console errors (a shader that fails to compile shows up here) and
 the frames drawn in 3 s next to the same page as it is today, so a shader that stalls\nthe page shows as a low count. Then The Puppy again with its search
-one texel at a time. Last, shaderBuilder.html is fed a stubbed OpenAI reply.
+one texel at a time.
 """
 import argparse
-import json
 from playwright.sync_api import sync_playwright
 
 ORPHAN_EXTERN = """
@@ -108,28 +107,6 @@ def puppy_texel_step():
     return src.replace(PUPPY_SLOW, PUPPY_TEXEL)
 
 
-RED = "void main() { gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); }"
-
-
-def builder(b):
-    """shaderBuilder.html with api.openai.com answering a red shader: is it shown, is the plane red?"""
-    pg = b.new_page(viewport={"width": 1280, "height": 900})
-    pg.route("https://api.openai.com/**", lambda route: route.fulfill(
-        status=200, content_type="application/json",
-        body=json.dumps({"choices": [{"message": {"content": RED}}]})))
-    pg.goto(a.base + "shaderBuilder.html", wait_until="load")
-    pg.wait_for_timeout(2500)
-    pg.fill("#apiKey", "sk-probe")
-    pg.fill("#userPrompt", "a red shader")
-    pg.click(".promptSection button")
-    pg.wait_for_timeout(2000)
-    shown = pg.evaluate("document.getElementById('fragmentCode').textContent")
-    # the canvas is judged on the screenshot: readPixels on a cleared drawing buffer reads 0
-    print("builder: reply shown in #fragmentCode:", RED in shown, flush=True)
-    pg.screenshot(path=f"{a.out}-builder.png", full_page=True)
-    pg.close()
-
-
 # A browser per check: closing the page The Puppy froze hangs, closing its browser does not.
 with sync_playwright() as p:
     for args in [("galleryExtern.html", [], "extern-as-is", False),
@@ -142,6 +119,3 @@ with sync_playwright() as p:
         b = launch(p)
         run(b, *args)
         b.close()
-    b = launch(p)
-    builder(b)
-    b.close()

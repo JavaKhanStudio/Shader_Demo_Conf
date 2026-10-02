@@ -50,7 +50,7 @@ THREE is a GLOBAL from <script src=".../three@0.153.0/build/three.min.js"> in ea
 no bundler, no import map, no package.json. Modules use the global.
 build/three.min.js is gone from later three releases, so an upgrade means ES-module imports (inferred).
 js/shaderExplanation.js loadExplanations(kind): 'basics' (index.html), 'music'
-(explicationSounds.html), 'builder' (shaderBuilder.html, loads js/EmptyDefault.js).
+(explicationSounds.html). The GPT 'builder' mode and shaderBuilder.html were deleted in r4.
 URL: ?page=N starts at step N, ?lang=FR|ENG picks the explanation text.
 It injects parts/fullPresentation.html into #main-placeholder. setInformations() writes to
 `titleSection`, a name declared nowhere: it reaches h1#titleSection only through the browser's
@@ -83,15 +83,14 @@ color = "#ff9f43"
 sort = 30
 context = """
 Static site, no build. Pages: index.html (Explanations), galleryExtern/AI/Style/ToApply.html,
-explicationSounds.html; the nav is parts/header.html. shaderBuilder.html is not in the nav
-(its link is parked in parts/TODO); parts/partPresentation.html is loaded by nothing (both wait on
-Simon's r4 answer). tools/orphan_shaders_probe.py renders whatever no list or page loads.
+explicationSounds.html; the nav is parts/header.html. Every root page is in the nav (r4 deleted
+shaderBuilder.html, the GPT builder, and the unloaded parts/partPresentation.html).
 Header and footer are fetch()ed into #header-placeholder/#footer-placeholder by js/load-sections.js;
 code touching <header> waits on window.loadAllSections. fetch() needs HTTP: file:// breaks it.
 Serve it: viewer `site` (python3 -m http.server 8792 from the root).
 Every page repeats its own <head> (three CDN; font-awesome 6.0.0-beta3, Kanit and favicon
-images/LogoSBP.ico in all but shaderBuilder.html): a head change is made in each .html. Titles differ: "Shader Shop" mostly,
-"Document" on explicationSounds.html, "GPT-4 Code Generator" on shaderBuilder.html.
+images/LogoSBP.ico): a head change is made in each .html. Titles differ: "Shader Shop" mostly,
+"Document" on explicationSounds.html.
 Every local href/src/url is relative, which is why it works under /Shader_Demo_Conf/ and any subpath.
 Hosting: GitHub Pages, legacy build from main at / (https://javakhanstudio.github.io/Shader_Demo_Conf/):
 a push to main is live.
@@ -105,7 +104,6 @@ css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0
 js/shaderExplanation.js setInformations() shows it only when the step has a text.
 parts/footer.html links the BDX I/O 2024 openfeedback page and the Google Slides deck;
 ThreeJS_Shader.pdf (8.2 MB, 61 slides, French) sits at the root and is served too.
-shaderBuilder.html sends a key typed by the visitor to api.openai.com, model 'gpt-4'.
 """
 
 [tags.docs]
