@@ -1,4 +1,10 @@
-export default new THREE.ShaderMaterial({
+export default
+{
+    name: 'The Tunnel V2',
+    description: '',
+    author: 'nayk',
+    // no ref: the Shadertoy link it carried (WtKSzt) is Monster's
+    material: new THREE.ShaderMaterial({
   uniforms: {
     iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }, // Screen resolution
     iTime: { value: 0.0 } // Time in seconds
@@ -83,4 +89,5 @@ export default new THREE.ShaderMaterial({
       gl_FragColor = fragColor;
     }
   `
-});
+})
+}

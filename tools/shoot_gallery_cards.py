@@ -7,6 +7,7 @@ Serve the site first (viewer `site`: python3 -m http.server 8792 from the root).
     tools/shoot_gallery_cards.py out/x "Water Dance" --page galleryAI.html --widths 1280,390
 """
 import argparse
+import re
 from playwright.sync_api import sync_playwright
 
 ap = argparse.ArgumentParser()
@@ -30,7 +31,9 @@ with sync_playwright() as p:
             if pg.locator("button.previous").count():  # back to page 1 for each card
                 while pg.locator("button.previous").first.is_enabled():
                     pg.locator("button.previous").first.click()
-            card = pg.locator("div", has=pg.locator(".shader-name", has_text=name)).last
+            # exact title: has_text is a substring match, so "The Tunnel" would also pick "The Tunnel V2"
+            exact = re.compile("^" + re.escape(name) + "$")
+            card = pg.locator("div", has=pg.locator(".shader-name", has_text=exact)).last
             for _ in range(10):  # under 768px the gallery shows 6 cards a page: turn pages until it is there
                 if card.count() or not pg.locator("button.next").count() \
                         or not pg.locator("button.next").first.is_enabled():

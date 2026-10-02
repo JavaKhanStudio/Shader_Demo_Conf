@@ -5,23 +5,13 @@ Serve the site first (viewer `site`: python3 -m http.server 8792 from the root).
 
     tools/orphan_shaders_probe.py out/orphans     # -> one png per orphan card, and per page
 
-galleryExtern.html is loaded with its list (js/externShaderMaterials/ZShadersList.js) swapped for
-one naming the orphans; galleryToApply.html with The Puppy entry as it was before 7ad4f7b.
+galleryToApply.html is loaded with The Puppy entry as it was before 7ad4f7b.
 Prints, per page, the console errors (a shader that fails to compile shows up here) and
 the frames drawn in 3 s next to the same page as it is today, so a shader that stalls\nthe page shows as a low count. Then The Puppy again with its search
 one texel at a time.
 """
 import argparse
 from playwright.sync_api import sync_playwright
-
-ORPHAN_EXTERN = """
-import Tunnel from '../complexShadersMaterials/tunnel.js';
-import TunnelV2 from '../complexShadersMaterials/tunnelV2.js';
-export const shaders = [
-    {name: 'Tunnel (complex, never shown)', material: Tunnel, author: 'nayk'},
-    {name: 'Tunnel V2 (complex, never shown)', material: TunnelV2, author: 'nayk'},
-];
-"""
 
 ORPHAN_APPLIED = """
 import ThePuppyMaterial from './thePuppy.js';
@@ -109,9 +99,7 @@ def puppy_texel_step():
 
 # A browser per check: closing the page The Puppy froze hangs, closing its browser does not.
 with sync_playwright() as p:
-    for args in [("galleryExtern.html", [], "extern-as-is", False),
-                 ("galleryExtern.html", [("js/externShaderMaterials/ZShadersList.js", ORPHAN_EXTERN)], "extern-orphans", True),
-                 ("galleryToApply.html", [], "applied-as-is", False),
+    for args in [("galleryToApply.html", [], "applied-as-is", False),
                  ("galleryToApply.html", [("js/toApplyShaderMaterials/ZtoApplyShaderList.js", ORPHAN_APPLIED)], "applied-puppy", False),
                  ("galleryToApply.html", [("js/toApplyShaderMaterials/ZtoApplyShaderList.js", ORPHAN_APPLIED),
                                           ("js/toApplyShaderMaterials/thePuppy.js", puppy_texel_step())],
