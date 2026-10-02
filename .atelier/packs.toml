@@ -95,6 +95,9 @@ images/LogoSBP.ico in all but shaderBuilder.html): a head change is made in each
 Every local href/src/url is relative, which is why it works under /Shader_Demo_Conf/ and any subpath.
 Hosting: GitHub Pages, legacy build from main at / (https://javakhanstudio.github.io/Shader_Demo_Conf/):
 a push to main is live.
+sitemap.xml (root) lists the six public pages; each carries a <link rel="canonical"> to its sitemap URL.
+A new or renamed root page goes in PUBLIC or PRIVATE of tools/seo-check.mjs, which fails until it does.
+No robots.txt: the host root belongs to no repo.
 css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0752CF) and .logo
 (images/LogoHeaderSBP.webp). #explanationSection is display:none in css/fullPresentation.css;
 js/shaderExplanation.js setInformations() shows it only when the step has a text.
