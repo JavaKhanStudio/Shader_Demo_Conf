@@ -30,6 +30,13 @@ main {
     height: 150px;
 }
 
+/* The logo is the way back to the parent site: above the header's shader canvas, so it stays clickable */
+a.logo {
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
 .centered {
     display: flex;
     flex-direction: column;
@@ -50,6 +57,10 @@ footer p {
     margin: 0;
     padding: 0.5em 0;
     font-weight: bold;
+}
+
+footer p a.parent-site {
+    color: #f0f0f0;
 }
 
 footer .social-links {
