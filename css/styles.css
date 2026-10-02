@@ -184,6 +184,13 @@ canvas:fullscreen {
     border-radius: 0;
 }
 
+/* The square canvas is taller than simpleShaderCard.css's fixed 500px card, whose overflow:hidden
+   then cut the title off: an Applied card grows to hold its canvas, title and slider. */
+.painter-shader-grid .shader-item {
+    height: auto;
+    max-height: none;
+}
+
 
 .pagination-controls {
     display: flex;
