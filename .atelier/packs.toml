@@ -98,6 +98,8 @@ a push to main is live.
 sitemap.xml (root) lists the six public pages; each carries a <link rel="canonical"> to its sitemap URL.
 A new or renamed root page goes in PUBLIC or PRIVATE of tools/seo-check.mjs, which fails until it does.
 No robots.txt: the host root belongs to no repo.
+After a push to main that adds or renames a page (and so changes sitemap.xml), once Pages serves it:
+node tools/indexnow.mjs (Bing & co.; --dry-run first). Its key is 2611b4116d9db33f51e1cd9651635c96.txt at the root: never delete it.
 css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0752CF) and .logo
 (images/LogoHeaderSBP.webp). #explanationSection is display:none in css/fullPresentation.css;
 js/shaderExplanation.js setInformations() shows it only when the step has a text.
