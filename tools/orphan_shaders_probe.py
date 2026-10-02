@@ -16,15 +16,9 @@ import json
 from playwright.sync_api import sync_playwright
 
 ORPHAN_EXTERN = """
-import GraySky from '../aiMadeShaderMaterials/GraySky.js';
-import MonsterV2 from './monsterV2.js';
-import TrigGraph from './trigGraph.js';
 import Tunnel from '../complexShadersMaterials/tunnel.js';
 import TunnelV2 from '../complexShadersMaterials/tunnelV2.js';
 export const shaders = [
-    {...GraySky, name: 'GraySky (aiMade, never listed)'},
-    {...MonsterV2, name: 'monsterV2 (extern, unlisted a69f9fb)', author: '?'},
-    {...TrigGraph, name: 'trigGraph (unlisted c8831d0)', author: '?'},
     {name: 'Tunnel (complex, never shown)', material: Tunnel, author: 'nayk'},
     {name: 'Tunnel V2 (complex, never shown)', material: TunnelV2, author: 'nayk'},
 ];

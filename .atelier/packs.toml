@@ -17,13 +17,14 @@ One THREE.ShaderMaterial per file, in js/<category>ShaderMaterials/. A page show
 folder's list imports: aiMade, extern -> ZShadersList.js; style -> ZShaderList.js; toApply ->
 ZtoApplyShaderList.js; explainer steps -> explanationsShaderMaterials/explanationList.js; sounds ->
 explanationsSoundsShadersMaterials/soundsExplanationList.js.
-Unlisted today, so never shown: aiMadeShaderMaterials/GraySky.js, externShaderMaterials/monsterV2.js
-and trigGraph.js, toApplyShaderMaterials/thePuppy.js (unlisted in 7ad4f7b, "the puppy is breaking
-computer"), and all of js/complexShadersMaterials/ (its ZsimpleShadersList.js is imported by nothing).
+Unlisted today, so never shown: toApplyShaderMaterials/thePuppy.js (unlisted in 7ad4f7b, "the puppy
+is breaking computer": a while loop of up to 10M texture reads per pixel), and all of
+js/complexShadersMaterials/ (its ZsimpleShadersList.js is imported by nothing); both wait on r4.
+tools/orphan_shaders_probe.py renders them with the real gallery code.
 Entry shapes differ by folder: aiMade and extern files default-export {name, author, material};
 explainer steps {name, explanationFR, explanationENG, codeJS, material}; style and toApply files
 export a bare material, which the Z list wraps with name/author (toApply also baseImage,
-optionalImage2). Match the folder you add to (unlisted monsterV2.js and trigGraph.js have no name).
+optionalImage2). Match the folder you add to.
 The runtime drives uniforms BY NAME and nothing else: `time` (seconds) everywhere; `iTime` and
 `iResolution` only in the galleries (js/galleryShadersViews.js); `mousePosition` in the explainer;
 `amplitude`, `dominantFrequency`, `bandAmplitudes` on the sounds page; `uTexture` from the
