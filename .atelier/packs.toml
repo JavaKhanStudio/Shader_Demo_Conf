@@ -8,6 +8,7 @@
 # once; a line marked (inferred) was not.
 
 [tags.shaders]
+visual = true          # a screen: its close needs a Chose: line (r1559, r1584)
 label = "Shaders"
 description = "The GLSL materials: js/*ShaderMaterials/, their Z*List.js indexes, the explainer steps and jsCodeExplain/"
 color = "#c56cf0"
@@ -40,6 +41,7 @@ Proof: open the page that lists it (viewer `site`, e.g. galleryAI.html) and read
 """
 
 [tags.webgl]
+visual = true          # a screen: its close needs a Chose: line (r1559, r1584)
 label = "three.js runtime"
 description = "The JS that renders shaders: shaderExplanation.js (explainer pager), galleryShadersViews.js, galleryToApplyShaderViews.js, shaderInjector.js, audioInputs.js"
 color = "#48dbfb"
@@ -76,6 +78,7 @@ tools/sounds-mic-probe.mjs drives the sounds page in headless Chrome with a fake
 """
 
 [tags.site]
+visual = true          # a screen: its close needs a Chose: line (r1559, r1584)
 label = "Pages & look"
 description = "The HTML pages, parts/ (header, footer, cards), css/, images/, the slides PDF, GitHub Pages hosting and the subsite framing"
 color = "#ff9f43"
