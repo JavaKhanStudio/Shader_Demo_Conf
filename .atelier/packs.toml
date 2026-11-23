@@ -38,6 +38,8 @@ Explainer steps: explanationENG/explanationFR hold the "Code Explanation" text (
 an empty one hides the box, as on the sounds page). They are written by tools/fill_explanations.py:
 edit the text there and re-run it, or the next run overwrites a hand edit. codeJS names a file in jsCodeExplain/ that is fetched and shown as text, not run.
 Proof: open the page that lists it (viewer `site`, e.g. galleryAI.html) and read the console.
+SEE IT: serve the site (python3 -m http.server 8792), then tools/shoot_first_screen.py <page>.html out/<name> (1280 and 390; --full for the whole page)
+THE ROUND (board skill §4, r4524): an ask's first picture is framed close on its subject, captioned "Shows: <it>" (a closer camera, or magick <shot> -crop WxH+X+Y +repage <lead>); then the takes; at most one context picture.
 """
 
 [tags.webgl]
@@ -75,6 +77,8 @@ goes in #params, inside .interactionSection, which fullPresentation.html hides w
 audioInputs.js unhides that section itself. A new interaction must do the same.
 Proof: no tests; open each page through viewer `site` and watch the console.
 tools/sounds-mic-probe.mjs drives the sounds page in headless Chrome with a fake mic (needs a server on :8765).
+SEE IT: serve the site (python3 -m http.server 8792), then tools/shoot_first_screen.py <page>.html out/<name> (1280 and 390; --full for the whole page)
+THE ROUND (board skill §4, r4524): an ask's first picture is framed close on its subject, captioned "Shows: <it>" (a closer camera, or magick <shot> -crop WxH+X+Y +repage <lead>); then the takes; at most one context picture.
 """
 
 [tags.site]
@@ -106,6 +110,8 @@ css/global.css :root holds the palette (--primary-red #BA0101, --primary-blue #0
 js/shaderExplanation.js setInformations() shows it only when the step has a text.
 parts/footer.html links the BDX I/O 2024 openfeedback page and the Google Slides deck;
 ThreeJS_Shader.pdf (8.2 MB, 61 slides, French) sits at the root and is served too.
+SEE IT: serve the site (python3 -m http.server 8792), then tools/shoot_first_screen.py <page>.html out/<name> (1280 and 390; --full for the whole page)
+THE ROUND (board skill §4, r4524): an ask's first picture is framed close on its subject, captioned "Shows: <it>" (a closer camera, or magick <shot> -crop WxH+X+Y +repage <lead>); then the takes; at most one context picture.
 """
 
 [tags.docs]
